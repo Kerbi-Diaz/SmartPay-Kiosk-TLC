@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - TLC Smart Payment Kiosk</title>
+  <link href="/src/output.css" rel="stylesheet">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body class="bg-gray-100 h-screen">
+  <div class="container mx-auto p-4 h-full flex flex-col">
+    <!-- Header -->
+    <header class="bg-blue-700 text-white p-4 rounded-t-lg shadow-md flex items-center justify-between">
+      <div class="flex items-center">
+        <img src="/src/img/tlc_logo.png?height=60&width=60" alt="TLC Logo" class="h-12 mr-3">
+        <div>
+          <h1 class="text-2xl font-bold">The Lewis College</h1>
+          <p class="text-sm">Smart RFID Payment Kiosk</p>
+        </div>
+      </div>
+      <div class="text-right">
+        <p class="text-sm">April 17, 2025 4:26 PM</p>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col bg-white rounded-b-lg shadow-md overflow-hidden">
+      <div class="p-6">
+        <div class="flex items-center mb-6">
+          <button id="back-btn" class="mr-4 bg-gray-200 p-2 rounded-full hover:bg-gray-300">
+            <i class='bx bx-arrow-back text-xl'></i>
+          </button>
+          <h2 class="text-2xl font-bold text-gray-800">Checkout</h2>
+        </div>
+
+        <div class="bg-blue-50 p-4 rounded-lg mb-6">
+          <div class="flex items-start">
+            <i class='bx bx-info-circle text-blue-600 text-2xl mr-3 mt-1'></i>
+            <div>
+              <h3 class="font-bold text-blue-800">Student Information</h3>
+              <div class="flex flex-wrap">
+                <p class="text-blue-700 text-sm mr-4"><span class="font-medium">Name:</span> <span>Juan Dela Cruz</span></p>
+                <p class="text-blue-700 text-sm mr-4"><span class="font-medium">ID:</span> <span>C-2023-12345</span></p>
+                <p class="text-blue-700 text-sm mr-4"><span class="font-medium">Course:</span> <span> BSIT</span></p>
+                <p class="text-blue-700 text-sm mr-4"><span class="font-medium">Year Level:</span> <span>2nd Year</span></p>
+                <p class="text-blue-700 text-sm"><span class="font-medium">Email:</span> <span>juan.delacruz@student.tlc.edu.ph</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Order Summary -->
+          <div class="bg-white border border-gray-200 rounded-lg p-5">
+            <h3 class="font-bold text-gray-800 mb-4">Order Summary</h3>
+            
+            <div id="checkout-items" class="space-y-3 mb-4">
+              <!-- Items will be populated dynamically -->
+              <div class="flex justify-between pb-3 border-b">
+                <div>
+                  <p class="font-medium">PE Uniform (Shirt)</p>
+                  <p class="text-sm text-gray-500">Size: Medium</p>
+                </div>
+                <p class="font-bold">₱350.00</p>
+              </div>
+              <div class="flex justify-between pb-3 border-b">
+                <div>
+                  <p class="font-medium">PE Uniform (Shorts)</p>
+                  <p class="text-sm text-gray-500">Size: Medium</p>
+                </div>
+                <p class="font-bold">₱300.00</p>
+              </div>
+            </div>
+            
+            <div class="flex justify-between pt-3 border-t">
+              <p class="font-bold text-gray-800">Total:</p>
+              <p class="font-bold text-xl text-blue-600" id="checkout-total">₱650.00</p>
+            </div>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="bg-white border border-gray-200 rounded-lg p-4">
+            <h3 class="font-bold text-gray-800 mb-3">Payment Method</h3>
+            
+            <div class="space-y-3 mb-6">
+              <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer">
+                <input type="radio" name="payment-method" value="gcash" class="mr-3" checked>
+                <i class='bx bxs-mobile text-blue-500 text-2xl mr-2'></i>
+                <span>GCash</span>
+              </label>
+              <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer">
+                <input type="radio" name="payment-method" value="card" class="mr-3">
+                <i class='bx bx-credit-card text-blue-500 text-2xl mr-2'></i>
+                <span>Credit/Debit Card</span>
+              </label>
+              <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer">
+                <input type="radio" name="payment-method" value="bank" class="mr-3">
+                <i class='bx bxs-bank text-blue-500 text-2xl mr-2'></i>
+                <span>Online Banking</span>
+              </label>
+            </div>
+
+            <div class="mb-5">
+              <h4 class="font-medium text-gray-700 mb-2">Email Receipt To:</h4>
+              <input type="email" id="receipt-email" class="w-full p-2 border border-gray-300 rounded-lg" value="john.doe@student.tlc.edu.ph">
+              <div class="flex items-center mt-2">
+                <input type="checkbox" id="auto-print-receipt" class="mr-2" checked>
+                <label for="auto-print-receipt" class="text-sm text-gray-600">Automatically print receipt</label>
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center">
+              <button id="cancel-payment-btn" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+                Cancel
+              </button>
+                <button id="processing-modal-btn" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+                Pay ₱650.00
+                </button>
+              </div>
+            </div>
+            </div>
+          </div>
+          </main>
+          <!-- Footer -->
+          <footer class="mt-4 text-center text-gray-600 text-sm">
+            <p>© 2025 The Lewis College. All rights reserved.</p>
+            <p>Smart RFID-Authenticated Self-Service Payment Kiosk</p>
+          </footer>
+          </div>
+
+          <!-- Payment Processing Modal -->
+            <div id="processing-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="display: none;">
+            <div class="bg-white rounded-lg p-8 w-full max-w-md text-center">
+              <div class="mb-6">
+              <i class='bx bx-loader-alt text-blue-600 text-6xl'></i>
+              </div>
+              <h2 class="text-2xl font-bold text-gray-800 mb-4">Processing Payment</h2>
+              <p class="text-gray-600 mb-2">Please wait while we process your payment...</p>
+              <p class="text-sm text-gray-500">Do not close this window or navigate away.</p>
+            </div>
+            </div>
+          </div>
+</body>
+</html>
