@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Success - TLC Smart Payment Kiosk</title>
+  <link href="src/output.css" rel="stylesheet">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body class="bg-gray-100 h-screen">
+  <div class="container mx-auto p-4 h-full flex flex-col">
+    <!-- Header -->
+    <header class="bg-blue-700 text-white p-4 rounded-t-lg shadow-md flex items-center justify-between">
+      <div class="flex items-center">
+        <img src="/src/img/tlc_logo.png?height=60&width=60" alt="TLC Logo" class="h-12 mr-3">
+        <div>
+          <h1 class="text-2xl font-bold">The Lewis College</h1>
+          <p class="text-sm">Smart RFID Payment Kiosk</p>
+        </div>
+      </div>
+      <div class="text-right">
+        <p class="text-sm">April 17, 2025 4:26 PM</p>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col bg-white rounded-b-lg shadow-md overflow-hidden">
+      <div class="p-6 flex flex-col items-center justify-center text-center flex-grow">
+        <div class="bg-green-100 p-6 rounded-full mb-6">
+          <i class='bx bx-check-circle text-green-600 text-6xl'></i>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Payment Successful!</h2>
+        <p class="text-gray-600 mb-6">Your transaction has been completed successfully.</p>
+        
+        <div class="bg-gray-50 p-6 rounded-lg w-full max-w-md mb-8">
+          <h3 class="font-bold text-gray-800 mb-3">Receipt Details</h3>
+          <div class="space-y-2 text-left">
+            <div class="flex justify-between">
+              <span class="text-gray-500">Transaction ID:</span>
+              <span class="font-medium" id="receipt-transaction-id">TLC-20230001</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">Date & Time:</span>
+              <span class="font-medium" id="receipt-date-time">April 17, 2025 4:26 PM</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">Amount Paid:</span>
+              <span class="font-medium" id="receipt-amount">₱650.00</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">Payment Method:</span>
+              <span class="font-medium" id="receipt-method">GCash</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 w-full max-w-md">
+          <button id="view-receipt-btn" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center">
+            <i class='bx bx-receipt mr-2'></i> View Receipt
+          </button>
+          <button id="new-transaction-btn" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center">
+            <i class='bx bx-refresh mr-2'></i> New Transaction
+          </button>
+        </div>
+        
+        <p class="text-sm text-gray-500 mt-6">
+          A receipt has been automatically printed and sent to your email.
+        </p>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-4 text-center text-gray-600 text-sm">
+      <p>© 2025 The Lewis College. All rights reserved.</p>
+      <p>Smart RFID-Authenticated Self-Service Payment Kiosk</p>
+    </footer>
+  </div>
+
+ 
+</body>
+</html>
