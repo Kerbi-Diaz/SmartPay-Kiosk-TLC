@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Items - TLC Payment Kiosk</title>
+    <link rel="icon" href="../src/img/tlc_logo.png" type="image/x-icon">
+    <link href="../src/output.css" rel="stylesheet">    
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="../src/img/tlc_logo.png" type="image/x-icon">
+
+  </head>
+  
+<body class="bg-gray-100 min-h-screen">
+  <div class="flex h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-blue-800 text-white">
+      <div class="p-4 flex items-center border-b border-blue-700">
+        <img src="../src/img/tlc_logo.png?height=60&width=60" alt="TLC Logo" class="h-12 mr-3">
+        <div>
+          <h1 class="font-bold">TLC Admin</h1>
+          <p class="text-xs text-blue-200">Payment Kiosk System</p>
+        </div>
+      </div>
+      <nav class="p-4">
+        <ul class="space-y-2">
+          <li>
+            <a href="admin-dashboard.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bxs-dashboard mr-3'></i> Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="transactions.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-history mr-3'></i> Transactions
+            </a>
+          </li>
+          <li>
+            <a href="students.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-user mr-3'></i> Students
+            </a>
+          </li>
+          <li>
+            <a href="inventory.html" class="flex items-center p-2 rounded-lg bg-blue-700 hover:bg-blue-700">
+              <i class='bx bx-package mr-3'></i> Items
+            </a>
+          </li>
+          <li>
+            <a href="reports.html" class="flex items-center p-2 rounded-lg  hover:bg-blue-600">
+              <i class='bx bx-bar-chart-alt-2 mr-3'></i> Reports
+            </a>
+          </li>
+          <li>
+            <a href="settings.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-cog mr-3'></i> Settings
+            </a>
+          </li>
+          <li class="mt-8">
+            <a href="admin-login.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-log-out mr-3'></i> Logout
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+    <!-- Main Content -->
+    <main class="flex-1 overflow-auto">
+      <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+        <h2 class="text-xl font-bold text-gray-800">Items Management</h2>
+        <div class="flex items-center">
+          <span class="mr-4 text-sm text-gray-600" id="current-date-time">Loading date and time...</span>
+          <div class="flex items-center">
+            <span class="text-sm font-medium">Admin User</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="p-6">
+        <!-- Filters and Actions -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+          <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+            <h3 class="font-bold text-gray-800 mb-3 md:mb-0">Items Management</h3>
+            <div class="flex flex-wrap gap-2">
+              <button id="export-items-btn" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 flex items-center">
+                <i class='bx bx-export mr-1'></i> Export
+              </button>
+              <button id="print-items-btn" class="bg-gray-200 text-gray-800 px-3 py-1 rounded text-sm hover:bg-gray-300 flex items-center">
+                <i class='bx bx-printer mr-1'></i> Print
+              </button>
+              <button id="add-item-btn" class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700 flex items-center">
+                <i class='bx bx-plus mr-1'></i> Add Item
+              </button>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">Category</label>
+              <select id="category-filter" class="w-full border border-gray-300 rounded p-2 text-sm">
+                <option value="">All Categories</option>
+                <option value="uniforms">Uniforms</option>
+                <option value="books">Books</option>
+                <option value="supplies">School Supplies</option>
+                <option value="pe-uniforms">PE Uniforms</option>
+                <option value="id-lanyards">ID & Lanyards</option>
+              </select>
+            </div>
+            
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">Year Level</label>
+              <select id="year-level-filter" class="w-full border border-gray-300 rounded p-2 text-sm">
+                <option value="">All Year Levels</option>
+                <option value="1st">1st Year</option>
+                <option value="2nd">2nd Year</option>
+                <option value="3rd">3rd Year</option>
+                <option value="4th">4th Year</option>
+              </select>
+            </div>
+            
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">Sort By</label>
+              <select id="sort-by" class="w-full border border-gray-300 rounded p-2 text-sm">
+                <option value="name-asc">Name (A-Z)</option>
+                <option value="name-desc">Name (Z-A)</option>
+                <option value="price-asc">Price (Low to High)</option>
+                <option value="price-desc">Price (High to Low)</option>
+                <option value="bought-asc">Bought (Low to High)</option>
+                <option value="bought-desc">Bought (High to Low)</option>
+              </select>
+            </div>
+            
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">Search</label>
+              <div class="relative">
+                <input id="items-search" type="text" placeholder="Search items..." class="w-full border border-gray-300 rounded p-2 pl-8 text-sm">
+                <i class='bx bx-search absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400'></i>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-4 flex justify-end">
+            <button id="apply-items-filters" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+              Apply Filters
+            </button>
+          </div>
+        </div>
+
+        <!-- Items Table -->
+        <div class="bg-white rounded-lg shadow-sm">
+          <div class="p-4 border-b flex justify-between items-center">
+            <h3 class="font-bold text-gray-800">Items</h3>
+            <span id="items-count" class="text-sm text-gray-500">Showing 8 items</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="bg-gray-50">
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="id">
+                    Item ID <i class='bx bx-sort-alt-2'></i>
+                  </th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="name">
+                    Item Name <i class='bx bx-sort-alt-2'></i>
+                  </th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="category">
+                    Category <i class='bx bx-sort-alt-2'></i>
+                  </th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="price">
+                    Price <i class='bx bx-sort-alt-2'></i>
+                  </th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="bought">
+                    Bought <i class='bx bx-sort-alt-2'></i>
+                  </th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="items-table-body" class="divide-y divide-gray-200">
+                <!-- Items will be dynamically inserted here -->
+              </tbody>
+            </table>
+          </div>
+          <div class="p-4 border-t flex justify-between items-center">
+            <p class="text-sm text-gray-500">Showing <span id="showing-count">0</span> of <span id="total-count">0</span> items</p>
+            <div class="flex space-x-1">
+              <button id="prev-page" class="px-3 py-1 border rounded-lg text-sm">Previous</button>
+              <div id="page-numbers" class="flex space-x-1">
+                <!-- Page numbers will be inserted here -->
+              </div>
+              <button id="next-page" class="px-3 py-1 border rounded-lg text-sm">Next</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Item Details Modal -->
+  <div id="item-details-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-gray-800">Item Details</h2>
+        <button id="close-item-details" class="text-gray-500 hover:text-gray-700">
+          <i class='bx bx-x text-2xl'></i>
+        </button>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div class="md:col-span-1">
+          <div class="bg-gray-50 p-4 rounded-lg text-center">
+            <img id="modal-item-image" src="/placeholder.svg?height=150&width=150" alt="Item Image" class="h-32 w-32 object-cover rounded-lg mx-auto mb-4">
+            <h3 id="modal-item-name" class="text-xl font-bold text-gray-800">Item Name</h3>
+            <p id="modal-item-id" class="text-gray-600">ID: ITEM-001</p>
+          </div>
+        </div>
+        
+        <div class="md:col-span-2">
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <h4 class="font-bold text-gray-800 mb-3">Item Information</h4>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-sm text-gray-500">Category:</p>
+                <p id="modal-item-category" class="font-medium">Category</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Year Level:</p>
+                <p id="modal-item-year-level" class="font-medium">All</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Price:</p>
+                <p id="modal-item-price" class="font-medium">₱0.00</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Times Bought:</p>
+                <p id="modal-item-bought" class="font-medium">0</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Status:</p>
+                <p id="modal-item-status" class="font-medium">Hidden</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-gray-50 p-4 rounded-lg mb-6">
+        <h4 class="font-bold text-gray-800 mb-3">Item Description</h4>
+        <p id="modal-item-description" class="text-gray-700">
+          Item description goes here.
+        </p>
+      </div>
+      
+      <div class="flex justify-end space-x-3">
+        <button id="edit-item-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          Edit Item
+        </button>
+        <button id="toggle-status-btn" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+          Toggle Status
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Item Modal -->
+  <div id="item-form-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-4">
+        <h2 id="item-form-title" class="text-xl font-bold text-gray-800">Add New Item</h2>
+        <button id="close-item-form" class="text-gray-500 hover:text-gray-700">
+          <i class='bx bx-x text-2xl'></i>
+        </button>
+      </div>
+      
+      <form id="item-form">
+        <input type="hidden" id="edit-item-id">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label for="item-id" class="block text-sm text-gray-600 mb-1">Item ID*</label>
+            <input type="text" id="item-id" name="item-id" class="w-full border border-gray-300 rounded p-2 text-sm" placeholder="e.g., ITEM-001" required>
+          </div>
+          <div>
+            <label for="item-name" class="block text-sm text-gray-600 mb-1">Item Name*</label>
+            <input type="text" id="item-name" name="item-name" class="w-full border border-gray-300 rounded p-2 text-sm" placeholder="e.g., PE Uniform (Shirt)" required>
+          </div>
+          <div>
+            <label for="item-category" class="block text-sm text-gray-600 mb-1">Category*</label>
+            <select id="item-category" name="item-category" class="w-full border border-gray-300 rounded p-2 text-sm" required>
+              <option value="uniforms">Uniforms</option>
+              <option value="books">Books</option>
+              <option value="supplies">School Supplies</option>
+              <option value="pe-uniforms">PE Uniforms</option>
+              <option value="id-lanyards">ID & Lanyards</option>
+            </select>
+          </div>
+          <div>
+            <label for="item-year-level" class="block text-sm text-gray-600 mb-1">Year Level*</label>
+            <select id="item-year-level" name="item-year-level" class="w-full border border-gray-300 rounded p-2 text-sm" required>
+              <option value="all">All Year Levels</option>
+              <option value="1st">1st Year</option>
+              <option value="2nd">2nd Year</option>
+              <option value="3rd">3rd Year</option>
+              <option value="4th">4th Year</option>
+            </select>
+          </div>
+          <div>
+            <label for="item-price" class="block text-sm text-gray-600 mb-1">Price (₱)*</label>
+            <input type="number" id="item-price" name="item-price" class="w-full border border-gray-300 rounded p-2 text-sm" placeholder="e.g., 350" required min="0" step="0.01">
+          </div>
+          <div>
+            <label for="item-status" class="block text-sm text-gray-600 mb-1">Status*</label>
+            <select id="item-status" name="item-status" class="w-full border border-gray-300 rounded p-2 text-sm" required>
+              <option value="hidden">Hidden</option>
+              <option value="show">Show in List</option>
+              <option value="kiosk">Show in Kiosk</option>
+            </select>
+          </div>
+          <div class="md:col-span-2">
+            <label for="item-description" class="block text-sm text-gray-600 mb-1">Description*</label>
+            <textarea id="item-description" name="item-description" rows="4" class="w-full border border-gray-300 rounded p-2 text-sm" placeholder="Enter item description..." required></textarea>
+          </div>
+          <div class="md:col-span-2">
+            <label for="item-image" class="block text-sm text-gray-600 mb-1">Item Image</label>
+            <input type="file" id="item-image" name="item-image" class="w-full border border-gray-300 rounded p-2 text-sm" accept="image/*">
+            <div id="image-preview" class="mt-2 hidden">
+              <img id="preview-image" src="#" alt="Preview" class="h-32 object-cover rounded-lg">
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex justify-end space-x-3">
+          <button type="button" id="cancel-item-form" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+            Cancel
+          </button>
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Save Item
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="delete-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-gray-800">Confirm Deletion</h2>
+        <button id="close-delete-modal" class="text-gray-500 hover:text-gray-700">
+          <i class='bx bx-x text-2xl'></i>
+        </button>
+      </div>
+      
+      <div class="mb-4">
+        <p class="text-gray-700">Are you sure you want to delete <span id="delete-item-name" class="font-medium">this item</span>?</p>
+        <p class="text-red-600 mt-2">This action cannot be undone.</p>
+      </div>
+      
+      <div class="flex justify-end space-x-3">
+        <button type="button" id="cancel-delete" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+          Cancel
+        </button>
+        <button type="button" id="confirm-delete"
+        class="px-4 py-2 rounded text-white hover:opacity-90"
+        style="background-color: #dc2626;">
+        Delete Item
+      </button>
+      
+        
+      </div>
+      
+    </div>
+  </div>
+    </div>
+  </div>
+
+  <script>
+    // Sample data for items
+    let items = [
+      {
+        id: "ITEM-001",
+        name: "PE Uniform (Shirt)",
+        category: "PE Uniforms",
+        yearLevel: "all",
+        price: 350.00,
+        bought: 25,
+        status: "show",
+        description: "Official PE uniform shirt for The Lewis College students. Made of high-quality, breathable fabric suitable for physical activities. Required for all PE classes.",
+        image: "/placeholder.svg?height=40&width=40"
+      },
+      {
+        id: "ITEM-002",
+        name: "PE Uniform (SET)",
+        category: "PE Uniforms",
+        yearLevel: "all",
+        price: 800.00,
+        bought: 20,
+        status: "show",
+        description: "Official PE uniform shorts for The Lewis College students. Made of high-quality, breathable fabric suitable for physical activities. Required for all PE classes.",
+        image: "/placeholder.svg?height=40&width=40"
+      },
+      {
+        id: "ITEM-002",
+        name: "PE Uniform (Pants)",
+        category: "PE Uniforms",
+        yearLevel: "all",
+        price: 300.00,
+        bought: 20,
+        status: "show",
+        description: "Official PE uniform shorts for The Lewis College students. Made of high-quality, breathable fabric suitable for physical activities. Required for all PE classes.",
+        image: "/placeholder.svg?height=40&width=40"
+      },
+      {
+        id: "ITEM-003",
+        name: "ID Layards",
+        category: "ID & Lanyards",
+        yearLevel: "all",
+        price: 100.00,
+        bought: 150,
+        status: "show",
+        description: "Official TLC ID lace with school colors. Required for all students to display their school ID.",
+        image: "/placeholder.svg?height=40&width=40"
+      },
+    
+      {
+        id: "ITEM-005",
+        name: "School Uniform (Female)",
+        category: "Uniforms",
+        yearLevel: "all",
+        price: 850.00,
+        bought: 45,
+        status: "show",
+        description: "Official female school uniform for The Lewis College. Includes blouse and skirt.",
+        image: "/placeholder.svg?height=40&width=40"
+      },
+      {
+        id: "ITEM-006",
+        name: "School Uniform (Male)",
+        category: "Uniforms",
+        yearLevel: "all",
+        price: 850.00,
+        bought: 40,
+        status: "show",
+        description: "Official male school uniform for The Lewis College. Includes polo and pants.",
+        image: "/placeholder.svg?height=40&width=40"
+      },
+    
+   
+
+    ];
+
+    // Current state
+    let currentPage = 1;
+    const itemsPerPage = 8;
+    let currentSort = "name-asc";
+    let currentFilters = {
+      category: "",
+      yearLevel: "",
+      search: ""
+    };
+
+    // DOM elements
+    const itemsTableBody = document.getElementById('items-table-body');
+    const itemsCount = document.getElementById('items-count');
+    const showingCount = document.getElementById('showing-count');
+    const totalCount = document.getElementById('total-count');
+    const pageNumbers = document.getElementById('page-numbers');
+    const prevPageBtn = document.getElementById('prev-page');
+    const nextPageBtn = document.getElementById('next-page');
+    const applyFiltersBtn = document.getElementById('apply-items-filters');
+    const categoryFilter = document.getElementById('category-filter');
+    const yearLevelFilter = document.getElementById('year-level-filter');
+    const sortBy = document.getElementById('sort-by');
+    const itemsSearch = document.getElementById('items-search');
+    const addItemBtn = document.getElementById('add-item-btn');
+    const exportItemsBtn = document.getElementById('export-items-btn');
+    const printItemsBtn = document.getElementById('print-items-btn');
+
+    // Modal elements
+    const itemDetailsModal = document.getElementById('item-details-modal');
+    const closeItemDetails = document.getElementById('close-item-details');
+    const editItemBtn = document.getElementById('edit-item-btn');
+    const toggleStatusBtn = document.getElementById('toggle-status-btn');
+    
+    const itemFormModal = document.getElementById('item-form-modal');
+    const closeItemForm = document.getElementById('close-item-form');
+    const cancelItemForm = document.getElementById('cancel-item-form');
+    const itemForm = document.getElementById('item-form');
+    const itemFormTitle = document.getElementById('item-form-title');
+    const editItemId = document.getElementById('edit-item-id');
+    const itemIdInput = document.getElementById('item-id');
+    const itemNameInput = document.getElementById('item-name');
+    const itemCategoryInput = document.getElementById('item-category');
+    const itemYearLevelInput = document.getElementById('item-year-level');
+    const itemPriceInput = document.getElementById('item-price');
+    const itemStatusInput = document.getElementById('item-status');
+    const itemDescriptionInput = document.getElementById('item-description');
+    const itemImageInput = document.getElementById('item-image');
+    const imagePreview = document.getElementById('image-preview');
+    const previewImage = document.getElementById('preview-image');
+    
+    const deleteModal = document.getElementById('delete-modal');
+    const closeDeleteModal = document.getElementById('close-delete-modal');
+    const cancelDelete = document.getElementById('cancel-delete');
+    const confirmDelete = document.getElementById('confirm-delete');
+    const deleteItemName = document.getElementById('delete-item-name');
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
+      
+      renderItemsTable();
+      setupEventListeners();
+    });
+
+    // Update current date and time
+    function updateDateTime() {
+      const now = new Date();
+      const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      };
+      document.getElementById('current-date-time').textContent = now.toLocaleDateString('en-US', options);
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+      // Sorting
+      document.querySelectorAll('[data-sort]').forEach(header => {
+        header.addEventListener('click', function() {
+          const sortField = this.getAttribute('data-sort');
+          if (currentSort === `${sortField}-asc`) {
+            currentSort = `${sortField}-desc`;
+          } else {
+            currentSort = `${sortField}-asc`;
+          }
+          renderItemsTable();
+        });
+      });
+
+      // Filtering
+      applyFiltersBtn.addEventListener('click', function() {
+        currentFilters = {
+          category: categoryFilter.value,
+          yearLevel: yearLevelFilter.value,
+          search: itemsSearch.value.toLowerCase()
+        };
+        currentPage = 1;
+        renderItemsTable();
+      });
+
+      // Pagination
+      prevPageBtn.addEventListener('click', function() {
+        if (currentPage > 1) {
+          currentPage--;
+          renderItemsTable();
+        }
+      });
+
+      nextPageBtn.addEventListener('click', function() {
+        const filteredItems = filterAndSortItems();
+        const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderItemsTable();
+        }
+      });
+
+      // Add item button
+      addItemBtn.addEventListener('click', function() {
+        itemFormTitle.textContent = "Add New Item";
+        itemForm.reset();
+        editItemId.value = "";
+        imagePreview.classList.add('hidden');
+        itemFormModal.classList.remove('hidden');
+      });
+
+      // Export button
+      exportItemsBtn.addEventListener('click', function() {
+        exportToCSV();
+      });
+
+      // Print button
+      printItemsBtn.addEventListener('click', function() {
+        window.print();
+      });
+
+      // Close modals
+      closeItemDetails.addEventListener('click', function() {
+        itemDetailsModal.classList.add('hidden');
+      });
+
+      closeItemForm.addEventListener('click', function() {
+        itemFormModal.classList.add('hidden');
+      });
+
+      cancelItemForm.addEventListener('click', function() {
+        itemFormModal.classList.add('hidden');
+      });
+
+      closeDeleteModal.addEventListener('click', function() {
+        deleteModal.classList.add('hidden');
+      });
+
+      cancelDelete.addEventListener('click', function() {
+        deleteModal.classList.add('hidden');
+      });
+
+      // Edit item button in details modal
+      editItemBtn.addEventListener('click', function() {
+        const itemId = document.getElementById('modal-item-id').textContent.split(': ')[1];
+        const item = items.find(item => item.id === itemId);
+        
+        if (item) {
+          itemFormTitle.textContent = "Edit Item";
+          editItemId.value = item.id;
+          itemIdInput.value = item.id;
+          itemNameInput.value = item.name;
+          itemCategoryInput.value = item.category;
+          itemYearLevelInput.value = item.yearLevel;
+          itemPriceInput.value = item.price;
+          itemStatusInput.value = item.status;
+          itemDescriptionInput.value = item.description;
+          
+          // For image, we would need to handle file uploads properly in a real app
+          imagePreview.classList.add('hidden');
+          
+          itemDetailsModal.classList.add('hidden');
+          itemFormModal.classList.remove('hidden');
+        }
+      });
+
+      // Toggle status button
+      toggleStatusBtn.addEventListener('click', function() {
+        const itemId = document.getElementById('modal-item-id').textContent.split(': ')[1];
+        const itemIndex = items.findIndex(item => item.id === itemId);
+        
+        if (itemIndex !== -1) {
+          // Cycle through statuses: hidden -> show -> kiosk -> hidden
+          if (items[itemIndex].status === 'hidden') {
+            items[itemIndex].status = 'show';
+          } else if (items[itemIndex].status === 'show') {
+            items[itemIndex].status = 'kiosk';
+          } else {
+            items[itemIndex].status = 'hidden';
+          }
+          
+          renderItemsTable();
+          itemDetailsModal.classList.add('hidden');
+        }
+      });
+
+      // Form submission
+      itemForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+          id: itemIdInput.value,
+          name: itemNameInput.value,
+          category: itemCategoryInput.value,
+          yearLevel: itemYearLevelInput.value,
+          price: parseFloat(itemPriceInput.value),
+          bought: 0, // New items start with 0 bought
+          status: itemStatusInput.value,
+          description: itemDescriptionInput.value,
+          image: "/placeholder.svg?height=40&width=40" // Default image
+        };
+        
+        if (editItemId.value) {
+          // Editing existing item
+          const itemIndex = items.findIndex(item => item.id === editItemId.value);
+          if (itemIndex !== -1) {
+            formData.bought = items[itemIndex].bought; // Keep existing bought count
+            items[itemIndex] = formData;
+          }
+        } else {
+          // Adding new item
+          items.push(formData);
+        }
+        
+        renderItemsTable();
+        itemFormModal.classList.add('hidden');
+      });
+
+      // Image preview
+      itemImageInput.addEventListener('change', function(e) {
+        if (e.target.files && e.target.files[0]) {
+          const reader = new FileReader();
+          
+          reader.onload = function(event) {
+            previewImage.src = event.target.result;
+            imagePreview.classList.remove('hidden');
+          };
+          
+          reader.readAsDataURL(e.target.files[0]);
+        }
+      });
+
+      // Delete confirmation
+      confirmDelete.addEventListener('click', function() {
+        const itemId = deleteItemName.getAttribute('data-id');
+        const itemIndex = items.findIndex(item => item.id === itemId);
+        
+        if (itemIndex !== -1) {
+          items.splice(itemIndex, 1);
+          renderItemsTable();
+        }
+        
+        deleteModal.classList.add('hidden');
+      });
+    }
+
+    // Filter and sort items based on current filters and sort
+    function filterAndSortItems() {
+      let filteredItems = [...items];
+      
+      // Apply filters
+      if (currentFilters.category) {
+        filteredItems = filteredItems.filter(item => item.category.toLowerCase() === currentFilters.category);
+      }
+      
+      if (currentFilters.yearLevel) {
+        filteredItems = filteredItems.filter(item => item.yearLevel === currentFilters.yearLevel || item.yearLevel === 'all');
+      }
+      
+      if (currentFilters.search) {
+        filteredItems = filteredItems.filter(item => 
+          item.name.toLowerCase().includes(currentFilters.search) || 
+          item.id.toLowerCase().includes(currentFilters.search) ||
+          item.description.toLowerCase().includes(currentFilters.search)
+        );
+      }
+      
+      // Apply sorting
+      const [sortField, sortDirection] = currentSort.split('-');
+      
+      filteredItems.sort((a, b) => {
+        let aValue, bValue;
+        
+        if (sortField === 'name') {
+          aValue = a.name.toLowerCase();
+          bValue = b.name.toLowerCase();
+        } else if (sortField === 'category') {
+          aValue = a.category.toLowerCase();
+          bValue = b.category.toLowerCase();
+        } else if (sortField === 'price') {
+          aValue = a.price;
+          bValue = b.price;
+        } else if (sortField === 'bought') {
+          aValue = a.bought;
+          bValue = b.bought;
+        } else {
+          aValue = a.id.toLowerCase();
+          bValue = b.id.toLowerCase();
+        }
+        
+        if (sortDirection === 'asc') {
+          return aValue > bValue ? 1 : (aValue < bValue ? -1 : 0);
+        } else {
+          return aValue < bValue ? 1 : (aValue > bValue ? -1 : 0);
+        }
+      });
+      
+      return filteredItems;
+    }
+
+    // Render the items table
+    function renderItemsTable() {
+      const filteredItems = filterAndSortItems();
+      const totalItems = filteredItems.length;
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+      
+      // Update counts
+      itemsCount.textContent = `Showing ${Math.min(itemsPerPage, totalItems)} items`;
+      showingCount.textContent = `${(currentPage - 1) * itemsPerPage + 1} - ${Math.min(currentPage * itemsPerPage, totalItems)}`;
+      totalCount.textContent = totalItems;
+      
+      // Clear table body
+      itemsTableBody.innerHTML = '';
+      
+      // Render items for the current page
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+      
+      for (let i = startIndex; i < endIndex; i++) {
+        const item = filteredItems[i];
+        const row = document.createElement('tr');
+        
+        row.innerHTML = `
+        <td class="py-3 px-4 text-sm text-gray-700">${item.id}</td>
+        <td class="py-3 px-4 text-sm text-gray-700">${item.name}</td>
+        <td class="py-3 px-4 text-sm text-gray-700">${item.category}</td>
+        <td class="py-3 px-4 text-sm text-gray-700">₱${item.price.toFixed(2)}</td>
+        <td class="py-3 px-4 text-sm text-gray-700">${item.bought}</td>
+        <td class="py-3 px-4 text-sm text-gray-700">${item.status.charAt(0).toUpperCase() + item.status.slice(1)}</td>
+        <td class="py-3 px-4">
+          <i class='bx bx-show text-blue-600 hover:text-blue-800 cursor-pointer' onclick="showItemDetails('${item.id}')"></i>
+          <i class='bx bx-trash text-red-600 hover:text-red-800 cursor-pointer ml-2' onclick="confirmDeleteItem('${item.id}', '${item.name}')"></i>
+        </td>
+      `;
+
+        
+        itemsTableBody.appendChild(row);
+      }
+      
+      // Render pagination
+      renderPagination(totalPages);
+    } 
+  // Render pagination buttons
+  function renderPagination(totalPages) {
+    pageNumbers.innerHTML = '';
+    for (let i = 1; i <= totalPages; i++) {
+      const pageButton = document.createElement('button');
+      pageButton.textContent = i;
+      pageButton.className = `px-3 py-1 border rounded-lg text-sm ${i === currentPage ? 'bg-blue-600 text-white' : ''}`;
+      pageButton.addEventListener('click', function () {
+        currentPage = i;
+        renderItemsTable();
+      });
+      pageNumbers.appendChild(pageButton);
+    }
+    prevPageBtn.disabled = currentPage === 1;
+    nextPageBtn.disabled = currentPage === totalPages;
+  }
+
+  // Show item details in the modal
+  function showItemDetails(itemId) {
+    const item = items.find(item => item.id === itemId);
+    if (item) {
+      document.getElementById('modal-item-id').textContent = `ID: ${item.id}`;
+      document.getElementById('modal-item-name').textContent = item.name;
+      document.getElementById('modal-item-category').textContent = item.category;
+      document.getElementById('modal-item-year-level').textContent = item.yearLevel === 'all' ? 'All' : item.yearLevel;
+      document.getElementById('modal-item-price').textContent = `₱${item.price.toFixed(2)}`;
+      document.getElementById('modal-item-bought').textContent = item.bought;
+      document.getElementById('modal-item-status').textContent = item.status.charAt(0).toUpperCase() + item.status.slice(1);
+      document.getElementById('modal-item-description').textContent = item.description;
+      document.getElementById('modal-item-image').src = item.image;
+      itemDetailsModal.classList.remove('hidden');
+    }
+  }
+
+  // Confirm delete item
+  function confirmDeleteItem(itemId, itemName) {
+    deleteItemName.textContent = itemName;
+    deleteItemName.setAttribute('data-id', itemId);
+    deleteModal.classList.remove('hidden');
+  }
+</script>
+
+    // Render pagination buttons 

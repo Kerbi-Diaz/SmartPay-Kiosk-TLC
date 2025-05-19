@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - TLC Payment Kiosk</title>
+  <link href="../src/output.css" rel="stylesheet">    
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="icon" href="../src/img/tlc_logo.png" type="image/x-icon">
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="flex h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-blue-800 text-white">
+      <div class="p-4 flex items-center border-b border-blue-700">
+        <img src="../src/img/tlc_logo.png?height=60&width=60" alt="TLC Logo" class="h-12 mr-3">
+        <div>
+          <h1 class="font-bold">TLC Admin</h1>
+          <p class="text-xs text-blue-200">Payment Kiosk System</p>
+        </div>
+      </div>
+      <nav class="p-4">
+        <ul class="space-y-2">
+          <li>
+            <a href="admin-dashboard.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bxs-dashboard mr-3'></i> Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="transactions.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-history mr-3'></i> Transactions
+            </a>
+          </li>
+          <li>
+            <a href="students.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-user mr-3'></i> Students
+            </a>
+          </li>
+          <li>
+            <a href="inventory.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-package mr-3'></i> Items
+            </a>
+          </li>
+          <li>
+            <a href="reports.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-bar-chart-alt-2 mr-3'></i> Reports
+            </a>
+          </li>
+          <li>
+            <a href="settings.html" class="flex items-center p-2 rounded-lg bg-blue-700 hover:bg-blue-600">
+              <i class='bx bx-cog mr-3'></i> Settings
+            </a>
+          </li>
+          <li class="mt-8">
+            <a href="admin-login.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-log-out mr-3'></i> Logout
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-auto">
+      <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+        <h2 class="text-xl font-bold text-gray-800">Settings</h2>
+        <div class="flex items-center">
+          <span class="mr-4 text-sm text-gray-600" id="current-date-time">Loading date and time...</span>
+          <div class="flex items-center">
+            <span class="text-sm font-medium">Admin User</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="p-6">
+        <!-- Settings Tabs -->
+        <div class="bg-white rounded-lg shadow-sm mb-6">
+          <div class="border-b">
+            <nav class="flex overflow-x-auto">
+              <button id="general-tab" class="settings-tab px-4 py-3 text-sm font-medium border-b-2 border-blue-600 text-blue-600">
+                General
+              </button>
+              <button id="printer-tab" class="settings-tab px-4 py-3 text-sm font-medium border-b-2 border-transparent hover:border-gray-300 hover:text-gray-700">
+                Printer Settings
+              </button>
+              <button id="users-tab" class="settings-tab px-4 py-3 text-sm font-medium border-b-2 border-transparent hover:border-gray-300 hover:text-gray-700">
+                User Management
+              </button>
+              <button id="backup-tab" class="settings-tab px-4 py-3 text-sm font-medium border-b-2 border-transparent hover:border-gray-300 hover:text-gray-700">
+                Backup & Restore
+              </button>
+            </nav>
+          </div>
+
+          <!-- General Settings -->
+          <div id="general-settings" class="settings-content p-6">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">General Settings</h3>
+            
+            <form id="general-settings-form">
+              <!-- Institution Details -->
+              <h4 class="font-medium text-gray-700 mb-3">Institution Details</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label for="school-name" class="block text-sm text-gray-600 mb-1">School Name</label>
+                  <input type="text" id="school-name" name="school-name" class="w-full border border-gray-300 rounded p-2 text-sm" value="The Lewis College">
+                </div>
+                <div>
+                  <label for="school-address" class="block text-sm text-gray-600 mb-1">School Address</label>
+                  <input type="text" id="school-address" name="school-address" class="w-full border border-gray-300 rounded p-2 text-sm" value="123 College Avenue, Sorsogon City">
+                </div>
+                <div>
+                  <label for="contact-number" class="block text-sm text-gray-600 mb-1">Contact Number</label>
+                  <input type="text" id="contact-number" name="contact-number" class="w-full border border-gray-300 rounded p-2 text-sm" value="(123) 456-7890">
+                </div>
+                <div>
+                  <label for="contact-email" class="block text-sm text-gray-600 mb-1">Contact Email</label>
+                  <input type="email" id="contact-email" name="contact-email" class="w-full border border-gray-300 rounded p-2 text-sm" value="info@tlc.edu.ph">
+                </div>
+                <div>
+                  <label for="academic-year" class="block text-sm text-gray-600 mb-1">Current Academic Year</label>
+                  <input type="text" id="academic-year" name="academic-year" class="w-full border border-gray-300 rounded p-2 text-sm" value="2024-2025">
+                </div>
+                <div>
+                  <label for="semester" class="block text-sm text-gray-600 mb-1">Current Semester</label>
+                  <select id="semester" name="semester" class="w-full border border-gray-300 rounded p-2 text-sm">
+                    <option value="1st">1st Semester</option>
+                    <option value="2nd" selected>2nd Semester</option>
+                    <option value="summer">Summer</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Kiosk Interface -->
+              <h4 class="font-medium text-gray-700 mb-3">Kiosk Interface</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label for="auto-refresh-timeout" class="block text-sm text-gray-600 mb-1">Welcome Screen Auto-Refresh (seconds)</label>
+                  <select id="auto-refresh-timeout" name="auto-refresh-timeout" class="w-full border border-gray-300 rounded p-2 text-sm">
+                    <option value="15">15</option>
+                    <option value="30" selected>30</option>
+                    <option value="45">45</option>
+                    <option value="60">60</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="screen-timeout" class="block text-sm text-gray-600 mb-1">Transaction Screen Timeout (minutes)</label>
+                  <select id="screen-timeout" name="screen-timeout" class="w-full border border-gray-300 rounded p-2 text-sm">
+                    <option value="1">1</option>
+                    <option value="2" selected>2</option>
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="welcome-message" class="block text-sm text-gray-600 mb-1">Welcome Screen Message</label>
+                  <textarea id="welcome-message" name="welcome-message" rows="2" maxlength="200" class="w-full border border-gray-300 rounded p-2 text-sm">Tap your student ID card to begin, or use Manual Entry if needed.</textarea>
+                </div>
+              </div>
+
+              <!-- Security -->
+              <h4 class="font-medium text-gray-700 mb-3">Security</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label for="admin-session-timeout" class="block text-sm text-gray-600 mb-1">Admin Session Timeout (minutes)</label>
+                  <select id="admin-session-timeout" name="admin-session-timeout" class="w-full border border-gray-300 rounded p-2 text-sm">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15" selected>15</option>
+                    <option value="30">30</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="flex items-center">
+                    <input type="checkbox" id="rfid-validation" name="rfid-validation" checked class="mr-2">
+                    <span class="text-sm text-gray-700">Enable Strict RFID Input Validation (10-digit IDs)</span>
+                  </label>
+                </div>
+                <div>
+                  <label for="failed-login-attempts" class="block text-sm text-gray-600 mb-1">Failed Login Attempts</label>
+                  <input type="number" id="failed-login-attempts" name="failed-login-attempts" class="w-full border border-gray-300 rounded p-2 text-sm" value="5" min="3" max="10">
+                </div>
+                <div>
+                  <label for="lockout-duration" class="block text-sm text-gray-600 mb-1">Lockout Duration (minutes)</label>
+                  <input type="number" id="lockout-duration" name="lockout-duration" class="w-full border border-gray-300 rounded p-2 text-sm" value="15" min="5" max="30">
+                </div>
+              </div>
+
+              <!-- Payment -->
+              <h4 class="font-medium text-gray-700 mb-3">Payment</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label class="block text-sm text-gray-600 mb-2">Enabled Payment Methods</label>
+                  <label class="flex items-center mb-2">
+                    <input type="checkbox" name="payment-gcash" checked class="mr-2">
+                    <span class="text-sm text-gray-700">GCash</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" name="payment-bank" checked class="mr-2">
+                    <span class="text-sm text-gray-700">Bank Transfer</span>
+                  </label>
+                </div>
+                <div>
+                  <label for="min-transaction-amount" class="block text-sm text-gray-600 mb-1">Minimum Transaction Amount (₱)</label>
+                  <input type="number" id="min-transaction-amount" name="min-transaction-amount" class="w-full border border-gray-300 rounded p-2 text-sm" value="0" min="0" max="100">
+                </div>
+                <div>
+                  <label class="flex items-center">
+                    <input type="checkbox" id="transaction-receipt" name="transaction-receipt" checked class="mr-2">
+                    <span class="text-sm text-gray-700">Send Email Receipts Automatically</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Reporting -->
+              <h4 class="font-medium text-gray-700 mb-3">Reporting</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label for="default-report-type" class="block text-sm text-gray-600 mb-1">Default Report Type</label>
+                  <select id="default-report-type" name="default-report-type" class="w-full border border-gray-300 rounded p-2 text-sm">
+                    <option value="revenue" selected>Revenue Report</option>
+                    <option value="payment">Payment Methods Report</option>
+                    <option value="unpaid">Unpaid Items Report</option>
+                    <option value="paid">Paid Items Report</option>
+                    <option value="sales-counter">Item Sales Counter Report</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="default-date-range" class="block text-sm text-gray-600 mb-1">Default Date Range</label>
+                  <select id="default-date-range" name="default-date-range" class="w-full border border-gray-300 rounded p-2 text-sm">
+                    <option value="today">Today</option>
+                    <option value="this-week">This Week</option>
+                    <option value="this-month" selected>This Month</option>
+                    <option value="last-month">Last Month</option>
+                    <option value="this-year">This Year</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="export-format" class="block text-sm text-gray-600 mb-1">Default Export Format</label>
+                  <select id="export-format" name="export-format" class="w-full border border-gray-300 rounded p-2 text-sm">
+                    <option value="csv" selected>CSV</option>
+                    <option value="pdf">PDF</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- System Maintenance -->
+              <h4 class="font-medium text-gray-700 mb-3">System Maintenance</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label class="flex items-center">
+                    <input type="checkbox" id="maintenance-mode" name="maintenance-mode" class="mr-2">
+                    <span class="text-sm text-gray-700">Enable Maintenance Mode</span>
+                  </label>
+                </div>
+                <div>
+                  <label for="log-retention" class="block text-sm text-gray-600 mb-1">Log Retention Period (days)</label>
+                  <input type="number" id="log-retention" name="log-retention" class="w-full border border-gray-300 rounded p-2 text-sm" value="90" min="30" max="365">
+                </div>
+                <div>
+                  <label class="flex items-center">
+                    <input type="checkbox" id="test-mode" name="test-mode" class="mr-2">
+                    <span class="text-sm text-gray-700">Enable Test Mode for Transactions</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- School Logo -->
+              <h4 class="font-medium text-gray-700 mb-3">Appearance</h4>
+              <div class="mb-6">
+                <label for="school-logo" class="block text-sm text-gray-600 mb-1">School Logo</label>
+                <div class="flex items-center">
+                  <img src="../src/img/tlc_logo.png?height=60&width=60" alt="School Logo" class="h-16 w-16 object-contain border rounded mr-4">
+                  <input type="file" id="school-logo" name="school-logo" accept="image/*" class="text-sm">
+                </div>
+              </div>
+              
+              <div class="flex justify-end">
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Printer Settings -->
+          <div id="printer-settings" class="settings-content p-6 hidden">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">Printer Settings</h3>
+            
+            <form id="printer-settings-form">
+              <div class="mb-6">
+                <div class="flex items-center justify-between mb-4">
+                  <h4 class="font-medium text-gray-700">Receipt Printer</h4>
+                  <div class="flex items-center">
+                    <span class="text-sm text-green-600 mr-2">Connected</span>
+                    <button type="button" id="test-print-btn" class="text-blue-600 hover:text-blue-800 text-sm">Test Print</button>
+                  </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div>
+                    <label for="printer-name" class="block text-sm text-gray-600 mb-1">Printer Name</label>
+                    <input type="text" id="printer-name" name="printer-name" class="w-full border border-gray-300 rounded p-2 text-sm" value="PT210 Printer">
+                  </div>
+                  <div>
+                    <label for="printer-connection" class="block text-sm text-gray-600 mb-1">Connection Type</label>
+                    <select id="printer-connection" name="printer-connection" class="w-full border border-gray-300 rounded p-2 text-sm">
+                      <option value="usb" selected>USB</option>
+                      <option value="network">Network</option>
+                      <option value="bluetooth">Bluetooth</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="paper-size" class="block text-sm text-gray-600 mb-1">Paper Size</label>
+                    <select id="paper-size" name="paper-size" class="w-full border border-gray-300 rounded p-2 text-sm">
+                      <option value="80mm">80mm</option>
+                      <option value="58mm" selected>58mm</option>
+                      <option value="76mm">76mm</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="print-copies" class="block text-sm text-gray-600 mb-1">Default Copies</label>
+                    <input type="number" id="print-copies" name="print-copies" class="w-full border border-gray-300 rounded p-2 text-sm" value="1" min="1" max="3">
+                  </div>
+                </div>
+                
+                <div class="mb-6">
+                  <h4 class="font-medium text-gray-700 mb-2">Receipt Options</h4>
+                  <div class="space-y-2">
+                    <label class="flex items-center">
+                      <input type="checkbox" name="auto-print" checked class="mr-2">
+                      <span class="text-sm text-gray-700">Automatically print receipt after successful payment</span>
+                    </label>
+                    <label class="flex items-center">
+                      <input type="checkbox" name="include-logo" checked class="mr-2">
+                      <span class="text-sm text-gray-700">Include school logo on receipt</span>
+                    </label>
+                    <label class="flex items-center">
+                      <input type="checkbox" name="include-barcode" checked class="mr-2">
+                      <span class="text-sm text-gray-700">Include barcode/QR code on receipt</span>
+                    </label>
+                    <label class="flex items-center">
+                      <input type="checkbox" name="include-footer" checked class="mr-2">
+                      <span class="text-sm text-gray-700">Include footer message on receipt</span>
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="mb-6">
+                  <label for="receipt-footer" class="block text-sm text-gray-600 mb-1">Receipt Footer Message</label>
+                  <textarea id="receipt-footer" name="receipt-footer" rows="2" class="w-full border border-gray-300 rounded p-2 text-sm">Thank you for your payment! For inquiries, please contact the accounting office.</textarea>
+                </div>
+              </div>
+              
+              <div class="flex justify-end">
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- User Management -->
+          <div id="user-management" class="settings-content p-6 hidden">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-bold text-gray-800">User Management</h3>
+              <button id="add-user-btn" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 flex items-center">
+                <i class='bx bx-plus mr-1'></i> Add User
+              </button>
+            </div>
+            
+            <div class="overflow-x-auto">
+              <table class="w-full" id="user-table">
+                <thead>
+                  <tr class="bg-gray-50">
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Login</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200" id="user-table-body">
+                  <!-- Populated dynamically by JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Backup & Restore -->
+          <div id="backup-restore" class="settings-content p-6 hidden">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">Backup & Restore</h3>
+            
+            <div class="mb-6">
+              <h4 class="font-medium text-gray-700 mb-3">Database Backup</h4>
+              <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <div class="flex justify-between items-center mb-3">
+                  <div>
+                    <p class="font-medium">Automatic Backups</p>
+                    <p class="text-sm text-gray-500">System will automatically backup the database daily</p>
+                  </div>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" name="auto-backup" class="sr-only peer" checked>
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label for="backup-time" class="block text-sm text-gray-600 mb-1">Backup Time</label>
+                    <input type="time" id="backup-time" name="backup-time" class="w-full border border-gray-300 rounded p-2 text-sm" value="02:00">
+                  </div>
+                  <div>
+                    <label for="backup-retention" class="block text-sm text-gray-600 mb-1">Retention Period (days)</label>
+                    <input type="number" id="backup-retention" name="backup-retention" class="w-full border border-gray-300 rounded p-2 text-sm" value="30" min="1">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="flex justify-between items-center mb-3">
+                <button id="manual-backup-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center">
+                  <i class='bx bx-download mr-2'></i> Create Manual Backup
+                </button>
+                <button id="download-backup-btn" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 flex items-center">
+                  <i class='bx bx-export mr-2'></i> Download Latest Backup
+                </button>
+              </div>
+            </div>
+            
+            <div class="mb-6">
+              <h4 class="font-medium text-gray-700 mb-3">Recent Backups</h4>
+              <div class="overflow-x-auto">
+                <table class="w-full" id="backup-table">
+                  <thead>
+                    <tr class="bg-gray-50">
+                      <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Backup Date</th>
+                      <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Size</th>
+                      <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                      <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                      <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-200" id="backup-table-body">
+                    <!-- Populated dynamically by JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <div class="mb-6">
+              <h4 class="font-medium text-gray-700 mb-3">Restore Database</h4>
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <p class="text-sm text-gray-600 mb-3">Upload a backup file to restore the database. This will overwrite all current data.</p>
+                <div class="mb-4">
+                  <input type="file" id="restore-file" name="restore-file" accept=".sql,.zip" class="text-sm">
+                </div>
+                <div class="flex items-center">
+                  <label class="flex items-center mr-4">
+                    <input type="checkbox" name="confirm-restore" class="mr-2">
+                    <span class="text-sm text-gray-700">I confirm that I want to restore the database</span>
+                  </label>
+                  <button id="restore-btn" class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    Restore Database
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- User Form Modal -->
+  <div id="user-form-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md">
+      <div class="flex justify-between items-center mb-4">
+        <h2 id="user-form-title" class="text-xl font-bold text-gray-800">Add User</h2>
+        <button id="close-user-form" class="text-gray-500 hover:text-gray-700">
+          <i class='bx bx-x text-2xl'></i>
+        </button>
+      </div>
+      
+      <form id="user-form">
+        <input type="hidden" id="user-id" name="user-id">
+        <div class="mb-4">
+          <label for="user-name" class="block text-sm text-gray-600 mb-1">Full Name</label>
+          <input type="text" id="user-name" name="user-name" class="w-full border border-gray-300 rounded p-2 text-sm" placeholder="e.g., John Doe">
+          <p class="text-red-600 text-xs mt-1 hidden" id="user-name-error">Full Name is required.</p>
+        </div>
+        <div class="mb-4">
+          <label for="user-email" class="block text-sm text-gray-600 mb-1">Email</label>
+          <input type="email" id="user-email" name="user-email" class="w-full border border-gray-300 rounded p-2 text-sm" placeholder="e.g., john.doe@tlc.edu.ph">
+          <p class="text-red-600 text-xs mt-1 hidden" id="user-email-error">Please enter a valid email address.</p>
+        </div>
+        <div class="mb-4">
+          <label for="user-username" class="block text-sm text-gray-600 mb-1">Username</label>
+          <input type="text" id="user-username" name="user-username" class="w-full border border-gray-300 rounded p-2 text-sm" placeholder="e.g., jdoe">
+          <p class="text-red-600 text-xs mt-1 hidden" id="user-username-error">Username is required.</p>
+        </div>
+        <div class="mb-4">
+          <label for="user-password" class="block text-sm text-gray-600 mb-1">Password</label>
+          <input type="password" id="user-password" name="user-password" class="w-full border border-gray-300 rounded p-2 text-sm">
+          <p class="text-red-600 text-xs mt-1 hidden" id="user-password-error">Password is required for new users.</p>
+        </div>
+        <div class="mb-4">
+          <label for="user-role" class="block text-sm text-gray-600 mb-1">Role</label>
+          <select id="user-role" name="user-role" class="w-full border border-gray-300 rounded p-2 text-sm">
+            <option value="admin">Administrator</option>
+            <option value="staff">Staff</option>
+            <option value="cashier">Cashier</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label for="user-status" class="block text-sm text-gray-600 mb-1">Status</label>
+          <select id="user-status" name="user-status" class="w-full border border-gray-300 rounded p-2 text-sm">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        
+        <div class="flex justify-end space-x-3">
+          <button type="button" id="cancel-user-form" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+            Cancel
+          </button>
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Save User
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div id="confirm-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md">
+      <div class="flex justify-between items-center mb-4">
+        <h2 id="confirm-title" class="text-xl font-bold text-gray-800">Confirm Action</h2>
+        <button id="close-confirm" class="text-gray-500 hover:text-gray-700">
+          <i class='bx bx-x text-2xl'></i>
+        </button>
+      </div>
+      <p id="confirm-message" class="text-sm text-gray-600 mb-4"></p>
+      <div class="flex justify-end space-x-3">
+        <button id="cancel-confirm" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+          Cancel
+        </button>
+        <button id="confirm-action" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Modal -->
+  <div id="feedback-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md">
+      <div class="flex justify-between items-center mb-4">
+        <h2 id="feedback-title" class="text-xl font-bold text-gray-800">Success</h2>
+        <button id="close-feedback" class="text-gray-500 hover:text-gray-700">
+          <i class='bx bx-x text-2xl'></i>
+        </button>
+      </div>
+      <p id="feedback-message" class="text-sm text-gray-600 mb-4"></p>
+      <div class="flex justify-end">
+        <button id="close-feedback-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // In-memory data storage
+      let users = [
+        {
+          id: '1',
+          name: 'Admin User',
+          email: 'admin@tlc.edu.ph',
+          username: 'admin',
+          role: 'admin',
+          status: 'active',
+          lastLogin: 'Apr 17, 2025 10:30 AM'
+        },
+        {
+          id: '2',
+          name: 'Maria Santos',
+          email: 'msantos@tlc.edu.ph',
+          username: 'msantos',
+          role: 'staff',
+          status: 'active',
+          lastLogin: 'Apr 16, 2025 3:45 PM'
+        },
+        {
+          id: '3',
+          name: 'John Cruz',
+          email: 'jcruz@tlc.edu.ph',
+          username: 'jcruz',
+          role: 'cashier',
+          status: 'active',
+          lastLogin: 'Apr 17, 2025 9:15 AM'
+        }
+      ];
+
+      let backups = [
+        {
+          id: '1',
+          date: 'Apr 17, 2025 02:00 AM',
+          size: '24.5 MB',
+          type: 'Automatic',
+          status: 'Completed'
+        },
+        {
+          id: '2',
+          date: 'Apr 16, 2025 02:00 AM',
+          size: '24.2 MB',
+          type: 'Automatic',
+          status: 'Completed'
+        },
+        {
+          id: '3',
+          date: 'Apr 15, 2025 10:30 AM',
+          size: '24.0 MB',
+          type: 'Manual',
+          status: 'Completed'
+        }
+      ];
+
+      // Utility functions
+      function showModal(modalId) {
+        document.getElementById(modalId).classList.remove('hidden');
+        document.getElementById(modalId).focus();
+      }
+
+      function hideModal(modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+      }
+
+      function showFeedback(title, message, isError = false) {
+        document.getElementById('feedback-title').textContent = isError ? 'Error' : 'Success';
+        document.getElementById('feedback-title').classList.toggle('text-red-600', isError);
+        document.getElementById('feedback-title').classList.toggle('text-green-600', !isError);
+        document.getElementById('feedback-message').textContent = message;
+        showModal('feedback-modal');
+      }
+
+      function showConfirm(title, message, onConfirm) {
+        document.getElementById('confirm-title').textContent = title;
+        document.getElementById('confirm-message').textContent = message;
+        const confirmBtn = document.getElementById('confirm-action');
+        confirmBtn.onclick = () => {
+          onConfirm();
+          hideModal('confirm-modal');
+        };
+        showModal('confirm-modal');
+      }
+
+      // Update current date and time
+      function updateDateTime() {
+        const now = new Date();
+        const options = { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+        };
+        document.getElementById('current-date-time').textContent = now.toLocaleDateString('en-US', options);
+      }
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
+
+      // Tab switching functionality
+      const tabs = {
+        'general-tab': 'general-settings',
+        'printer-tab': 'printer-settings',
+        'users-tab': 'user-management',
+        'backup-tab': 'backup-restore'
+      };
+
+      Object.keys(tabs).forEach(tabId => {
+        const tabElement = document.getElementById(tabId);
+        tabElement.addEventListener('click', function() {
+          document.querySelectorAll('.settings-tab').forEach(tab => {
+            tab.classList.remove('border-blue-600', 'text-blue-600');
+            tab.classList.add('border-transparent', 'hover:border-gray-300', 'hover:text-gray-700');
+          });
+          this.classList.add('border-blue-600', 'text-blue-600');
+          this.classList.remove('border-transparent', 'hover:border-gray-300', 'hover:text-gray-700');
+
+          document.querySelectorAll('.settings-content').forEach(content => {
+            content.classList.add('hidden');
+          });
+          document.getElementById(tabs[tabId]).classList.remove('hidden');
+        });
+      });
+
+      // General settings form submission
+      document.getElementById('general-settings-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData);
+
+        // Validation
+        const errors = [];
+        if (!data['school-name'].trim()) errors.push('School Name is required.');
+        if (data['contact-email'] && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data['contact-email'])) {
+          errors.push('Please enter a valid Contact Email.');
+        }
+        if (data['min-transaction-amount'] < 0 || data['min-transaction-amount'] > 100) {
+          errors.push('Minimum Transaction Amount must be between ₱0 and ₱100.');
+        }
+        if (data['log-retention'] < 30 || data['log-retention'] > 365) {
+          errors.push('Log Retention Period must be between 30 and 365 days.');
+        }
+        if (data['failed-login-attempts'] < 3 || data['failed-login-attempts'] > 10) {
+          errors.push('Failed Login Attempts must be between 3 and 10.');
+        }
+        if (data['lockout-duration'] < 5 || data['lockout-duration'] > 30) {
+          errors.push('Lockout Duration must be between 5 and 30 minutes.');
+        }
+        if (data['welcome-message'].length > 200) {
+          errors.push('Welcome Screen Message must be 200 characters or less.');
+        }
+        if (data['school-logo'].size > 5 * 1024 * 1024) {
+          errors.push('School Logo must be less than 5MB.');
+        }
+
+        if (errors.length > 0) {
+          showFeedback('Validation Error', errors.join(' '), true);
+          return;
+        }
+
+        showConfirm('Save General Settings', 'Are you sure you want to save these settings?', () => {
+          // Simulate saving to backend
+          showFeedback('Settings Saved', 'General settings have been saved successfully.');
+          // In a real app, send data to server (e.g., fetch('/api/settings/general', { method: 'POST', body: formData }))
+        });
+      });
+
+      // Printer settings form submission
+      document.getElementById('printer-settings-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData);
+
+        // Validation
+        const errors = [];
+        if (!data['printer-name'].trim()) errors.push('Printer Name is required.');
+        if (data['print-copies'] < 1 || data['print-copies'] > 3) {
+          errors.push('Default Copies must be between 1 and 3.');
+        }
+        if (data['receipt-footer'].length > 200) {
+          errors.push('Receipt Footer Message must be 200 characters or less.');
+        }
+
+        if (errors.length > 0) {
+          showFeedback('Validation Error', errors.join(' '), true);
+          return;
+        }
+
+        showConfirm('Save Printer Settings', 'Are you sure you want to save these printer settings?', () => {
+          showFeedback('Settings Saved', 'Printer settings have been saved successfully.');
+          // In a real app, send data to server
+        });
+      });
+
+      // Test print button
+      document.getElementById('test-print-btn').addEventListener('click', function() {
+        showConfirm('Test Print', 'Send a test print to the receipt printer?', () => {
+          // Simulate test print
+          showFeedback('Test Print', 'Test print sent successfully.');
+          // In a real app, trigger printer API
+        });
+      });
+
+      // User management
+      function renderUsers() {
+        const tbody = document.getElementById('user-table-body');
+        tbody.innerHTML = '';
+        users.forEach(user => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="py-3 px-4 text-sm font-medium">${user.name}</td>
+            <td class="py-3 px-4 text-sm">${user.email}</td>
+            <td class="py-3 px-4">
+              <span class="px-2 py-1 text-xs rounded-full ${
+                user.role === 'admin' ? 'bg-blue-100 text-blue-800' :
+                user.role === 'staff' ? 'bg-purple-100 text-purple-800' :
+                'bg-yellow-100 text-yellow-800'
+              }">${user.role.charAt(0).toUpperCase() + user.role.slice(1)}</span>
+            </td>
+            <td class="py-3 px-4">
+              <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">${user.status.charAt(0).toUpperCase() + user.status.slice(1)}</span>
+            </td>
+            <td class="py-3 px-4 text-sm">${user.lastLogin}</td>
+            <td class="py-3 px-4">
+              <div class="flex space-x-1">
+                <button class="text-blue-600 hover:text-blue-800 p-1 edit-user" data-id="${user.id}" title="Edit User">
+                  <i class='bx bx-edit'></i>
+                </button>
+                <button class="text-red-600 hover:text-red-800 p-1 delete-user" data-id="${user.id}" title="Delete User">
+                  <i class='bx bx-trash'></i>
+                </button>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      function validateUserForm(data, isEdit = false) {
+        const errors = [];
+        document.querySelectorAll('#user-form .text-red-600').forEach(el => el.classList.add('hidden'));
+
+        if (!data['user-name'].trim()) {
+          errors.push('Full Name is required.');
+          document.getElementById('user-name-error').classList.remove('hidden');
+        }
+        if (!data['user-email'].trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data['user-email'])) {
+          errors.push('Please enter a valid email address.');
+          document.getElementById('user-email-error').classList.remove('hidden');
+        }
+        if (!data['user-username'].trim()) {
+          errors.push('Username is required.');
+          document.getElementById('user-username-error').classList.remove('hidden');
+        }
+        if (!isEdit && !data['user-password']) {
+          errors.push('Password is required for new users.');
+          document.getElementById('user-password-error').classList.remove('hidden');
+        }
+        return errors;
+      }
+
+      const userModal = document.getElementById('user-form-modal');
+      const userForm = document.getElementById('user-form');
+      const addUserBtn = document.getElementById('add-user-btn');
+
+      addUserBtn.addEventListener('click', function() {
+        document.getElementById('user-form-title').textContent = 'Add User';
+        userForm.reset();
+        document.getElementById('user-id').value = '';
+        document.getElementById('user-password').required = true;
+        document.querySelectorAll('#user-form .text-red-600').forEach(el => el.classList.add('hidden'));
+        showModal('user-form-modal');
+      });
+
+      document.getElementById('close-user-form').addEventListener('click', () => hideModal('user-form-modal'));
+      document.getElementById('cancel-user-form').addEventListener('click', () => hideModal('user-form-modal'));
+
+      userForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData);
+        const isEdit = !!data['user-id'];
+        const errors = validateUserForm(data, isEdit);
+
+        if (errors.length > 0) {
+          showFeedback('Validation Error', errors.join(' '), true);
+          return;
+        }
+
+        showConfirm(
+          isEdit ? 'Update User' : 'Add User',
+          isEdit ? `Update user ${data['user-name']}?` : `Add user ${data['user-name']}?`,
+          () => {
+            if (isEdit) {
+              const index = users.findIndex(u => u.id === data['user-id']);
+              users[index] = {
+                ...users[index],
+                name: data['user-name'],
+                email: data['user-email'],
+                username: data['user-username'],
+                role: data['user-role'],
+                status: data['user-status'],
+                lastLogin: users[index].lastLogin
+              };
+              if (data['user-password']) {
+                // Update password (in a real app, hash it)
+              }
+            } else {
+              users.push({
+                id: String(users.length + 1),
+                name: data['user-name'],
+                email: data['user-email'],
+                username: data['user-username'],
+                role: data['user-role'],
+                status: data['user-status'],
+                lastLogin: new Date().toLocaleString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })
+              });
+            }
+            renderUsers();
+            hideModal('user-form-modal');
+            showFeedback('Success', `User ${isEdit ? 'updated' : 'added'} successfully.`);
+            // In a real app, send data to server
+          }
+        );
+      });
+
+      document.getElementById('user-table').addEventListener('click', function(e) {
+        if (e.target.closest('.edit-user')) {
+          const userId = e.target.closest('.edit-user').dataset.id;
+          const user = users.find(u => u.id === userId);
+          document.getElementById('user-form-title').textContent = 'Edit User';
+          document.getElementById('user-id').value = user.id;
+          document.getElementById('user-name').value = user.name;
+          document.getElementById('user-email').value = user.email;
+          document.getElementById('user-username').value = user.username;
+          document.getElementById('user-password').value = '';
+          document.getElementById('user-password').required = false;
+          document.getElementById('user-role').value = user.role;
+          document.getElementById('user-status').value = user.status;
+          document.querySelectorAll('#user-form .text-red-600').forEach(el => el.classList.add('hidden'));
+          showModal('user-form-modal');
+        } else if (e.target.closest('.delete-user')) {
+          const userId = e.target.closest('.delete-user').dataset.id;
+          const user = users.find(u => u.id === userId);
+          showConfirm('Delete User', `Are you sure you want to delete ${user.name}?`, () => {
+            users = users.filter(u => u.id !== userId);
+            renderUsers();
+            showFeedback('Success', 'User deleted successfully.');
+            // In a real app, send delete request to server
+          });
+        }
+      });
+
+      // Backup & Restore
+      function renderBackups() {
+        const tbody = document.getElementById('backup-table-body');
+        tbody.innerHTML = '';
+        backups.forEach(backup => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="py-3 px-4 text-sm">${backup.date}</td>
+            <td class="py-3 px-4 text-sm">${backup.size}</td>
+            <td class="py-3 px-4 text-sm">${backup.type}</td>
+            <td class="py-3 px-4">
+              <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">${backup.status}</span>
+            </td>
+            <td class="py-3 px-4">
+              <div class="flex space-x-1">
+                <button class="text-blue-600 hover:text-blue-800 p-1 download-backup" data-id="${backup.id}" title="Download">
+                  <i class='bx bx-download'></i>
+                </button>
+                <button class="text-green-600 hover:text-green-800 p-1 restore-backup" data-id="${backup.id}" title="Restore">
+                  <i class='bx bx-reset'></i>
+                </button>
+                <button class="text-red-600 hover:text-red-800 p-1 delete-backup" data-id="${backup.id}" title="Delete">
+                  <i class='bx bx-trash'></i>
+                </button>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      document.getElementById('manual-backup-btn').addEventListener('click', function() {
+        showConfirm('Create Manual Backup', 'Create a new manual backup of the database?', () => {
+          const now = new Date();
+          backups.unshift({
+            id: String(backups.length + 1),
+            date: now.toLocaleString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            }),
+            size: `${(24 + Math.random()).toFixed(1)} MB`,
+            type: 'Manual',
+            status: 'Completed'
+          });
+          renderBackups();
+          showFeedback('Success', 'Manual backup created successfully.');
+          // In a real app, trigger backup API
+        });
+      });
+
+      document.getElementById('download-backup-btn').addEventListener('click', function() {
+        if (backups.length === 0) {
+          showFeedback('Error', 'No backups available to download.', true);
+          return;
+        }
+        showConfirm('Download Latest Backup', 'Download the latest database backup?', () => {
+          showFeedback('Success', 'Backup download initiated.');
+          // In a real app, trigger download (e.g., window.location = '/api/backups/latest')
+        });
+      });
+
+      document.getElementById('backup-table').addEventListener('click', function(e) {
+        if (e.target.closest('.download-backup')) {
+          const backupId = e.target.closest('.download-backup').dataset.id;
+          showConfirm('Download Backup', 'Download this backup?', () => {
+            showFeedback('Success', 'Backup download initiated.');
+            // In a real app, trigger download
+          });
+        } else if (e.target.closest('.restore-backup')) {
+          const backupId = e.target.closest('.restore-backup').dataset.id;
+          const backup = backups.find(b => b.id === backupId);
+          showConfirm('Restore Backup', `Restore database from ${backup.date}? This will overwrite all current data.`, () => {
+            showFeedback('Success', 'Database restore initiated.');
+            // In a real app, trigger restore API
+          });
+        } else if (e.target.closest('.delete-backup')) {
+          const backupId = e.target.closest('.delete-backup').dataset.id;
+          const backup = backups.find(b => b.id === backupId);
+          showConfirm('Delete Backup', `Delete backup from ${backup.date}?`, () => {
+            backups = backups.filter(b => b.id !== backupId);
+            renderBackups();
+            showFeedback('Success', 'Backup deleted successfully.');
+            // In a real app, send delete request to server
+          });
+        }
+      });
+
+      const restoreFile = document.getElementById('restore-file');
+      const confirmRestore = document.querySelector('input[name="confirm-restore"]');
+      const restoreBtn = document.getElementById('restore-btn');
+
+      confirmRestore.addEventListener('change', function() {
+        restoreBtn.disabled = !this.checked || !restoreFile.files.length;
+      });
+
+      restoreFile.addEventListener('change', function() {
+        restoreBtn.disabled = !this.files.length || !confirmRestore.checked;
+      });
+
+      restoreBtn.addEventListener('click', function() {
+        if (restoreFile.files.length === 0) {
+          showFeedback('Error', 'Please select a backup file.', true);
+          return;
+        }
+        if (!confirmRestore.checked) {
+          showFeedback('Error', 'Please confirm the restore action.', true);
+          return;
+        }
+        showConfirm('Restore Database', 'Restore database from the uploaded file? This will overwrite all current data.', () => {
+          showFeedback('Success', 'Database restore initiated.');
+          restoreFile.value = '';
+          confirmRestore.checked = false;
+          restoreBtn.disabled = true;
+          // In a real app, upload file to server
+        });
+      });
+
+      // Modal close handlers
+      document.getElementById('close-confirm').addEventListener('click', () => hideModal('confirm-modal'));
+      document.getElementById('cancel-confirm').addEventListener('click', () => hideModal('confirm-modal'));
+      document.getElementById('close-feedback').addEventListener('click', () => hideModal('feedback-modal'));
+      document.getElementById('close-feedback-btn').addEventListener('click', () => hideModal('feedback-modal'));
+
+      // Keyboard accessibility
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          hideModal('user-form-modal');
+          hideModal('confirm-modal');
+          hideModal('feedback-modal');
+        }
+      });
+
+      // Initialize tables
+      renderUsers();
+      renderBackups();
+
+      // Tooltips for action buttons
+      document.querySelectorAll('[title]').forEach(element => {
+        element.addEventListener('mouseover', function() {
+          const tooltip = document.createElement('div');
+          tooltip.className = 'absolute z-10 bg-black text-white text-xs px-2 py-1 rounded mt-1';
+          tooltip.textContent = this.getAttribute('title');
+          this.appendChild(tooltip);
+          
+          const rect = this.getBoundingClientRect();
+          tooltip.style.left = '50%';
+          tooltip.style.bottom = '100%';
+          tooltip.style.transform = 'translateX(-50%)';
+          
+          this.addEventListener('mouseout', function() {
+            tooltip.remove();
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports - TLC Payment Kiosk</title>
+  <link href="../src/output.css" rel="stylesheet">    
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="../styles.css">
+  <!-- Chart.js for reports -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="icon" href="../src/img/tlc_logo.png" type="image/x-icon">
+
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="flex h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-blue-800 text-white">
+      <div class="p-4 flex items-center border-b border-blue-700">
+        <img src="../src/img/tlc_logo.png?height=60&width=60" alt="TLC Logo" class="h-12 mr-3">
+        <div>
+          <h1 class="font-bold">TLC Admin</h1>
+          <p class="text-xs text-blue-200">Payment Kiosk System</p>
+        </div>
+      </div>
+      <nav class="p-4">
+        <ul class="space-y-2">
+          <li>
+            <a href="admin-dashboard.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bxs-dashboard mr-3'></i> Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="transactions.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-history mr-3'></i> Transactions
+            </a>
+          </li>
+          <li>
+            <a href="students.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-user mr-3'></i> Students
+            </a>
+          </li>
+          <li>
+            <a href="inventory.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-package mr-3'></i> Items
+            </a>
+          </li>
+          <li>
+            <a href="reports.html" class="flex items-center p-2 rounded-lg bg-blue-700 hover:bg-blue-600">
+              <i class='bx bx-bar-chart-alt-2 mr-3'></i> Reports
+            </a>
+          </li>
+          <li>
+            <a href="settings.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-cog mr-3'></i> Settings
+            </a>
+          </li>
+          <li class="mt-8">
+            <a href="admin-login.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-log-out mr-3'></i> Logout
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-auto">
+      <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+        <h2 class="text-xl font-bold text-gray-800">Reports</h2>
+        <div class="flex items-center">
+          <span class="mr-4 text-sm text-gray-600" id="current-date-time">Loading date and time...</span>
+          <div class="flex items-center">
+            <span class="text-sm font-medium">Admin User</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="p-6">
+        <!-- Report Filters -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+          <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+            <h3 class="font-bold text-gray-800 mb-3 md:mb-0">Report Filters</h3>
+            <div class="flex flex-wrap gap-2">
+              <button id="export-report-btn" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 flex items-center">
+                <i class='bx bx-export mr-1'></i> Export
+              </button>
+              <button id="print-report-btn" class="bg-gray-200 text-gray-800 px-3 py-1 rounded text-sm hover:bg-gray-300 flex items-center">
+                <i class='bx bx-printer mr-1'></i> Print
+              </button>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">Report Type</label>
+              <select id="report-type" class="w-full border border-gray-300 rounded p-2 text-sm">
+                <option value="sales">Sales Report</option>
+                <option value="inventory">Inventory Report</option>
+                <option value="payment">Payment Methods Report</option>
+                <option value="unpaid">Unpaid Items Report</option>
+              </select>
+            </div>
+            
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">Date Range</label>
+              <select id="date-range" class="w-full border border-gray-300 rounded p-2 text-sm">
+                <option value="today">Today</option>
+                <option value="yesterday">Yesterday</option>
+                <option value="this-week">This Week</option>
+                <option value="this-month" selected>This Month</option>
+                <option value="last-month">Last Month</option>
+                <option value="this-year">This Year</option>
+                <option value="custom">Custom Range</option>
+              </select>
+            </div>
+            
+            <div id="custom-date-range" class="hidden md:grid md:grid-cols-2 gap-2">
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">Start Date</label>
+                <input type="date" id="start-date" class="w-full border border-gray-300 rounded p-2 text-sm">
+              </div>
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">End Date</label>
+                <input type="date" id="end-date" class="w-full border border-gray-300 rounded p-2 text-sm">
+              </div>
+            </div>
+            
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">Chart Type</label>
+              <select id="chart-type" class="w-full border border-gray-300 rounded p-2 text-sm">
+                <option value="bar">Bar Chart</option>
+                <option value="line">Line Chart</option>
+                <option value="pie">Pie Chart</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="mt-4 flex justify-end">
+            <button id="generate-report-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+              Generate Report
+            </button>
+          </div>
+        </div>
+
+        <!-- Report Content -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+          <h3 id="report-title" class="text-xl font-bold text-gray-800 mb-4">Sales Report - April 2025</h3>
+          
+          <div class="mb-6">
+            <canvas id="report-chart" height="300"></canvas>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="bg-blue-50 p-4 rounded-lg">
+              <h4 class="font-bold text-gray-800 mb-2">Total Sales</h4>
+              <p class="text-2xl font-bold text-blue-600">₱245,680</p>
+              <p class="text-sm text-green-600 flex items-center mt-1">
+                <i class='bx bx-up-arrow-alt'></i> 8% from last month
+              </p>
+            </div>
+            
+            <div class="bg-green-50 p-4 rounded-lg">
+              <h4 class="font-bold text-gray-800 mb-2">Total Transactions</h4>
+              <p class="text-2xl font-bold text-green-600">1,248</p>
+              <p class="text-sm text-green-600 flex items-center mt-1">
+                <i class='bx bx-up-arrow-alt'></i> 12% from last month
+              </p>
+            </div>
+            
+            <div class="bg-purple-50 p-4 rounded-lg">
+              <h4 class="font-bold text-gray-800 mb-2">Average Transaction</h4>
+              <p class="text-2xl font-bold text-purple-600">₱196.86</p>
+              <p class="text-sm text-red-600 flex items-center mt-1">
+                <i class='bx bx-down-arrow-alt'></i> 3% from last month
+              </p>
+            </div>
+          </div>
+          
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="bg-gray-50">
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transactions</th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sales</th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Top Selling Item</th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Top Payment Method</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                <tr>
+                  <td class="py-3 px-4 text-sm">Apr 17, 2025</td>
+                  <td class="py-3 px-4 text-sm">42</td>
+                  <td class="py-3 px-4 text-sm font-medium">₱8,450.00</td>
+                  <td class="py-3 px-4 text-sm">PE Uniform Set</td>
+                  <td class="py-3 px-4 text-sm">GCash</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 text-sm">Apr 16, 2025</td>
+                  <td class="py-3 px-4 text-sm">38</td>
+                  <td class="py-3 px-4 text-sm font-medium">₱7,620.00</td>
+                  <td class="py-3 px-4 text-sm">Mathematics Textbook</td>
+                  <td class="py-3 px-4 text-sm">GCash</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 text-sm">Apr 15, 2025</td>
+                  <td class="py-3 px-4 text-sm">45</td>
+                  <td class="py-3 px-4 text-sm font-medium">₱9,125.00</td>
+                  <td class="py-3 px-4 text-sm">School Uniform (Female)</td>
+                  <td class="py-3 px-4 text-sm">Credit Card</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 text-sm">Apr 14, 2025</td>
+                  <td class="py-3 px-4 text-sm">36</td>
+                  <td class="py-3 px-4 text-sm font-medium">₱7,200.00</td>
+                  <td class="py-3 px-4 text-sm">ID Lace</td>
+                  <td class="py-3 px-4 text-sm">GCash</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 text-sm">Apr 13, 2025</td>
+                  <td class="py-3 px-4 text-sm">40</td>
+                  <td class="py-3 px-4 text-sm font-medium">₱8,000.00</td>
+                  <td class="py-3 px-4 text-sm">PE Uniform Set</td>
+                  <td class="py-3 px-4 text-sm">Online Banking</td>
+                </tr>
+              </tbody>
+              <tfoot class="bg-gray-50">
+                <tr>
+                  <td class="py-3 px-4 text-sm font-bold">Total</td>
+                  <td class="py-3 px-4 text-sm font-bold">201</td>
+                  <td class="py-3 px-4 text-sm font-bold">₱40,395.00</td>
+                  <td class="py-3 px-4 text-sm"></td>
+                  <td class="py-3 px-4 text-sm"></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <!-- Unpaid Items Report -->
+        <div id="unpaid-items-report" class="bg-white rounded-lg shadow-sm p-6 mb-6 hidden">
+          <h3 class="text-xl font-bold text-gray-800 mb-4">Unpaid Items Report</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <canvas id="unpaid-items-chart" height="250"></canvas>
+            </div>
+            
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <h4 class="font-bold text-gray-800 mb-3">Summary</h4>
+              <div class="space-y-3">
+                <div class="flex justify-between items-center p-2 border-b">
+                  <p class="font-medium">PE Uniform</p>
+                  <p class="font-medium text-red-600">124 students</p>
+                </div>
+                <div class="flex justify-between items-center p-2 border-b">
+                  <p class="font-medium">Acquaintance Party</p>
+                  <p class="font-medium text-yellow-600">87 students</p>
+                </div>
+                <div class="flex justify-between items-center p-2 border-b">
+                  <p class="font-medium">Intramurals T-Shirt</p>
+                  <p class="font-medium text-blue-600">156 students</p>
+                </div>
+                <div class="flex justify-between items-center p-2">
+                  <p class="font-medium">Foundation Day</p>
+                  <p class="font-medium text-purple-600">62 students</p>
+                </div>
+              </div>
+              <div class="mt-4">
+                <p class="text-sm text-gray-600">Total students with unpaid items: <span class="font-bold">429</span></p>
+                <p class="text-sm text-gray-600">Percentage of student body: <span class="font-bold">11.2%</span></p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="bg-gray-50">
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Students</th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Value</th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course Breakdown</th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                <tr>
+                  <td class="py-3 px-4 text-sm font-medium">PE Uniform</td>
+                  <td class="py-3 px-4 text-sm">124</td>
+                  <td class="py-3 px-4 text-sm font-medium">₱80,600.00</td>
+                  <td class="py-3 px-4 text-sm">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-800">BSIT: 42</span>
+                      <span class="px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-800">BSBA: 35</span>
+                      <span class="px-2 py-0.5 text-xs rounded-full bg-purple-100 text-purple-800">BSED: 28</span>
+                      <span class="px-2 py-0.5 text-xs rounded-full bg-yellow-100 text-yellow-800">Others: 19</span>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <button class="text-blue-600 hover:text-blue-800 text-sm">View Students</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 text-sm font-medium">Acquaintance Party</td>
+                  <td class="py-3 px-4 text-sm">87</td>
+                  <td class="py-3 px-4 text-sm font-medium">₱69,600.00</td>
+                  <td class="py-3 px-4 text-sm">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-800">BSIT: 30</span>
+                      <span class="px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-800">BSBA: 25</span>
+                      <span class="px-2 py-0.5 text-xs rounded-full bg-purple-100 text-purple-800">BSED: 18</span>
+                      <span class="px-2 py-0.5 text-xs rounded-full bg-yellow-100 text-yellow-800">Others: 14</span>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <button class="text-blue-600 hover:text-blue-800 text-sm">View Students</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 text-sm font-medium">Intramurals T-Shirt</td>
+                  <td class="py-3 px-4 text-sm">156</td>
+                  <td class="py-3 px-4 text-sm font-medium">₱54,600.00</td>
+                  <td class="py-3 px-4 text-sm">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-800">BSIT: 52</span>
+                      <span class="px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-800">BSBA: 45</span>
+                      <span class="px-2 py-0.5 text-xs rounded-full bg-purple-100 text-purple-800">BSED: 38</span>
+                      <span class="px-2 py-0.5 text-xs rounded-full bg-yellow-100 text-yellow-800">Others: 21</span>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <button class="text-blue-600 hover:text-blue-800 text-sm">View Students</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 text-sm font-medium">Foundation Day</td>
+                  <td class="py-3 px-4 text-sm">62</td>
+                  <td class="py-3 px-4 text-sm font-medium">₱18,600.00</td>
+                  <td class="py-3 px-4 text-sm">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-800">BSIT: 20</span>
+                      <span class="px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-800">BSBA: 18</span>
+                      <span class="px-2 py-0.5 text-xs rounded-full bg-purple-100 text-purple-800">BSED: 15</span>
+                      <span class="px-2 py-0.5 text-xs rounded-full bg-yellow-100 text-yellow-800">Others: 9</span>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <button class="text-blue-600 hover:text-blue-800 text-sm">View Students</button>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot class="bg-gray-50">
+                <tr>
+                  <td class="py-3 px-4 text-sm font-bold">Total</td>
+                  <td class="py-3 px-4 text-sm font-bold">429</td>
+                  <td class="py-3 px-4 text-sm font-bold">₱223,400.00</td>
+                  <td class="py-3 px-4 text-sm"></td>
+                  <td class="py-3 px-4 text-sm"></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Chart configuration
+  const chartConfig = {
+    type: 'bar',
+    data: {
+      labels: ['Apr 13', 'Apr 14', 'Apr 15', 'Apr 16', 'Apr 17'],
+      datasets: [{
+        label: 'Sales (₱)',
+        data: [8000, 7200, 9125, 7620, 8450],
+        backgroundColor: 'rgba(59, 130, 246, 0.7)',
+        borderColor: 'rgba(59, 130, 246, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: getChartOptions('bar')
+  };
+
+  // Initialize chart
+  const ctx = document.getElementById('report-chart').getContext('2d');
+  let currentChart = new Chart(ctx, chartConfig);
+
+  // Handle chart type changes
+  document.getElementById('chart-type').addEventListener('change', function() {
+    updateChart(this.value);
+  });
+
+  // Adjustable chart function
+  function updateChart(type) {
+    // Update colors for pie charts
+    const bgColors = type === 'pie' ? [
+      'rgba(59, 130, 246, 0.7)',
+      'rgba(16, 185, 129, 0.7)',
+      'rgba(139, 92, 246, 0.7)',
+      'rgba(245, 158, 11, 0.7)',
+      'rgba(239, 68, 68, 0.7)'
+    ] : 'rgba(59, 130, 246, 0.7)';
+
+    // Destroy old chart
+    currentChart.destroy();
+
+    // Create new chart
+    currentChart = new Chart(ctx, {
+      type: type,
+      data: {
+        labels: chartConfig.data.labels,
+        datasets: [{
+          label: chartConfig.data.datasets[0].label,
+          data: chartConfig.data.datasets[0].data,
+          backgroundColor: bgColors,
+          borderColor: type === 'pie' ? bgColors.map(c => c.replace('0.7', '1')) : chartConfig.data.datasets[0].borderColor,
+          borderWidth: 1
+        }]
+      },
+      options: getChartOptions(type)
+    });
+  }
+
+  // Dynamic chart options
+  function getChartOptions(type) {
+    const baseOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: type === 'pie' ? 'right' : 'top',
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return '₱' + context.raw.toLocaleString();
+            }
+          }
+        }
+      }
+    };
+
+    if (type !== 'pie') {
+      baseOptions.scales = {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: function(value) {
+              return '₱' + value.toLocaleString();
+            }
+          }
+        }
+      };
+    }
+
+    return baseOptions;
+  }
+});
+</script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

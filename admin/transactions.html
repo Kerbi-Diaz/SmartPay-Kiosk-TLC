@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transactions - TLC Payment Kiosk</title>
+  <link href="../src/output.css" rel="stylesheet">    
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="icon" href="../src/img/tlc_logo.png" type="image/x-icon">
+
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="flex h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-blue-800 text-white">
+      <div class="p-4 flex items-center border-b border-blue-700">
+        <img src="../src/img/tlc_logo.png?height=60&width=60" alt="TLC Logo" class="h-12 mr-3">
+        <div>
+          <h1 class="font-bold">TLC Admin</h1>
+          <p class="text-xs text-blue-200">Payment Kiosk System</p>
+        </div>
+      </div>
+      <nav class="p-4">
+        <ul class="space-y-2">
+          <li>
+            <a href="admin-dashboard.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bxs-dashboard mr-3'></i> Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="transactions.html" class="flex items-center p-2 rounded-lg bg-blue-700 hover:bg-blue-600">
+              <i class='bx bx-history mr-3'></i> Transactions
+            </a>
+          </li>
+          <li>
+            <a href="students.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-user mr-3'></i> Students
+            </a>
+          </li>
+          <li>
+            <a href="inventory.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-package mr-3'></i> Items
+            </a>
+          </li>
+          <li>
+            <a href="reports.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-bar-chart-alt-2 mr-3'></i> Reports
+            </a>
+          </li>
+          <li>
+            <a href="settings.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-cog mr-3'></i> Settings
+            </a>
+          </li>
+          <li class="mt-8">
+            <a href="admin-login.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+              <i class='bx bx-log-out mr-3'></i> Logout
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-auto">
+      <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+        <h2 class="text-xl font-bold text-gray-800">Transactions</h2>
+        <div class="flex items-center">
+          <span class="mr-4 text-sm text-gray-600" id="current-date-time">Loading date and time...</span>
+          <div class="flex items-center">
+            <span class="text-sm font-medium">Admin User</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="p-6">
+        <!-- Filters and Search -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+          <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+            <h3 class="font-bold text-gray-800 mb-3 md:mb-0">Transaction Filters</h3>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="exportData()" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 flex items-center">
+                <i class='bx bx-export mr-1'></i> Export
+              </button>
+              <button onclick="printTable()" class="bg-gray-200 text-gray-800 px-3 py-1 rounded text-sm hover:bg-gray-300 flex items-center">
+                <i class='bx bx-printer mr-1'></i> Print
+              </button>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">Date Range</label>
+              <select id="dateRange" class="w-full border border-gray-300 rounded p-2 text-sm" onchange="filterTransactions()">
+                <option value="all">All Time</option>
+                <option value="today">Today</option>
+                <option value="yesterday">Yesterday</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+              </select>
+            </div>
+            
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">Payment For</label>
+              <select id="PaymentFor" class="w-full border border-gray-300 rounded p-2 text-sm" onchange="filterTransactions()">
+                <option value="all">All Item</option>
+                <option value="Intrams Fee">Intrams Fee</option>
+                <option value="NSTP shirt">NSTP shirt</option>
+                <option value="ID Lanyards">ID Lanyards</option>
+                <option value="PE Uniform SET">PE Uniform SET</option>
+              </select>
+            </div>
+            
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">Status</label>
+              <select id="statusFilter" class="w-full border border-gray-300 rounded p-2 text-sm" onchange="filterTransactions()">
+                <option value="all">All Status</option>
+                <option value="Completed">Completed</option>
+                <option value="Pending Claim">Pending Claim</option>
+              </select>
+            </div>
+            
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">Search</label>
+              <div class="relative">
+                <input type="text" id="searchInput" placeholder="Search by ID, student name, RFID..." 
+                       class="w-full border border-gray-300 rounded p-2 pl-8 text-sm"
+                       oninput="handleSearchInput()">
+                <i class='bx bx-search absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400'></i>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-4 flex justify-between items-center">
+            <button onclick="resetFilters()" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 mr-2">
+              Reset
+            </button>
+            <button onclick="filterTransactions()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+              Apply Filters
+            </button>
+          </div>
+        </div>
+
+        <!-- Transaction Modal -->
+        <div id="transactionModal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity">
+          <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md animate-slideDown">
+            <h2 class="text-xl font-semibold mb-4">Transaction Details</h2>
+            <div id="modalContent" class="text-sm text-gray-700 space-y-2"></div>
+            <div class="mt-4 text-right">
+              <button onclick="closeModal()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transactions Table -->
+        <div class="bg-white rounded-lg shadow-sm">
+          <div class="p-4 border-b flex justify-between items-center">
+            <h3 class="font-bold text-gray-800">All Transactions</h3>
+            <div class="text-sm text-gray-600">
+              Showing <span id="showingCount">0</span> of <span id="totalCount">0</span> transactions
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="bg-gray-50">
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onclick="sortTable('id')">
+                    Transaction ID <i id="sortIcon-id" class='bx bx-sort-alt-2'></i>
+                  </th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onclick="sortTable('student')">
+                    Student <i id="sortIcon-student" class='bx bx-sort-alt-2'></i>
+                  </th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onclick="sortTable('date')">
+                    Date <i id="sortIcon-date" class='bx bx-sort-alt-2'></i>
+                  </th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onclick="sortTable('amount')">
+                    Amount <i id="sortIcon-amount" class='bx bx-sort-alt-2'></i>
+                  </th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment For</th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="transactionBody" class="divide-y divide-gray-200">
+                <!-- Dynamic content will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+          <div class="p-4 border-t flex justify-between items-center">
+            <div class="text-sm text-gray-600">
+              Showing <span id="showingCountBottom">0</span> of <span id="totalCountBottom">0</span> transactions
+            </div>
+            <div class="flex items-center space-x-2">
+              <button onclick="changePage(-1)" class="p-1 rounded border disabled:opacity-50" id="prevBtn" disabled>
+                <i class='bx bx-chevron-left'></i>
+              </button>
+              <span id="pageInfo">Page 1 of 1</span>
+              <button onclick="changePage(1)" class="p-1 rounded border disabled:opacity-50" id="nextBtn" disabled>
+                <i class='bx bx-chevron-right'></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Sample transaction data
+      const transactions = [
+        {
+          id: "TLC-20230015",
+          student: { name: "Kerbi Vincent Eugerio", id: "2022-0560", rfid: "3320625758" },
+          date: new Date("2025-04-17"),
+          amount: 500.00,
+          type: "Intrams Fee",
+          method: "GCash",
+          status: "Completed",
+        },
+        {
+          id: "TLC-20230016",
+          student: { name: "Arjelone Joven", id: "2023-1021", rfid: "3871363172" },
+          date: new Date("2025-04-18"),
+          amount: 450.00,
+          type: "NSTP shirt",
+          method: "Credit Card",
+          status: "Pending Claim"
+        },
+        {
+          id: "TLC-20230017",
+          student: { name: "Ana Reyes", id: "2023-1023", rfid: "K1L2M3N4O5" },
+          date: new Date("2025-04-15"),
+          amount: 250.00,
+          type: "ID Lanyards",
+          method: "Cash",
+          status: "Claimed"
+        },
+        {
+          id: "TLC-20230018",
+          student: { name: "Carlos Lim", id: "2023-1024", rfid: "P6Q7R8S9T0" },
+          date: new Date("2025-04-20"),
+          amount: 500.00,
+          type: "Intrams Fee",
+          method: "GCash",
+          status: "Completed"
+        },
+        {
+          id: "TLC-20230019",
+          student: { name: "Lorna Diaz", id: "2023-10238", rfid: "U1V2W3X4Y5" },
+          date: new Date("2025-04-22"),
+          amount: 450.00,
+          type: "NSTP shirt",
+          method: "Credit Card",
+          status: "Pending Claim"
+        },
+        {
+          id: "TLC-20230020",
+          student: { name: "Roberto Gomez", id: "2023-1025", rfid: "Z6A7B8C9D0" },
+          date: new Date("2025-04-23"),
+          amount: 250.00,
+          type: "ID Lanyards",
+          method: "Cash",
+          status: "Completed"
+        },
+        {
+          id: "TLC-20230021",
+          student: { name: "Angela Cruz", id: "2023-1026", rfid: "E1F2G3H4I5" },
+          date: new Date("2025-04-24"),
+          amount: 500.00,
+          type: "Intrams Fee",
+          method: "GCash",
+          status: "Completed"
+        },
+        {
+          id: "TLC-20230022",
+          student: { name: "Mark David", id: "2023-1027", rfid: "J6K7L8M9N0" },
+          date: new Date("2025-04-25"),
+          amount: 450.00,
+          type: "NSTP shirt",
+          method: "Credit Card",
+          status: "Completed"
+        },
+        {
+          id: "TLC-20230023",
+          student: { name: "Nina Morales", id: "2023-1028", rfid: "O1P2Q3R4S5" },
+          date: new Date("2025-04-26"),
+          amount: 250.00,
+          type: "ID Lanyards",
+          method: "Cash",
+          status: "Pending Claim"
+        },
+        {
+          id: "TLC-20230024",
+          student: { name: "Jose Tan", id: "2023-1029", rfid: "T6U7V8W9X0" },
+          date: new Date("2025-04-27"),
+          amount: 500.00,
+          type: "Intrams Fee",
+          method: "GCash",
+          status: "Completed"
+        },
+        {
+          id: "TLC-20230025",
+          student: { name: "Clara Santos", id: "2023-1030", rfid: "Y1Z2A3B4C5" },
+          date: new Date("2025-04-28"),
+          amount: 450.00,
+          type: "NSTP shirt",
+          method: "Credit Card",
+          status: "Completed"
+        },
+        {
+          id: "TLC-20230026",
+          student: { name: "Kevin Ramos", id: "2023-1031", rfid: "D6E7F8G9H0" },
+          date: new Date("2025-04-29"),
+          amount: 800.00,
+          type: "PE Uniform SET",
+          method: "Cash",
+          status: "Completed"
+        },
+        {
+          id: "TLC-20230027",
+          student: { name: "Jasmine Lee", id: "2023-1032", rfid: "I1J2K3L4M5" },
+          date: new Date("2025-04-30"),
+          amount: 800.00,
+          type: "PE Uniform SET",
+          method: "GCash",
+          status: "Pending Claim"
+        },
+        {
+          id: "TLC-20230028",
+          student: { name: "Daryl Bautista", id: "2023-1033", rfid: "N6O7P8Q9R0" },
+          date: new Date("2025-05-01"),
+          amount: 800.00,
+          type: "PE Uniform SET",
+          method: "Credit Card",
+          status: "Completed"
+        },
+        {
+          id: "TLC-20230029",
+          student: { name: "Franchesca Yulo", id: "2023-1034", rfid: "S1T2U3V4W5" },
+          date: new Date("2025-05-02"),
+          amount: 800.00,
+          type: "PE Uniform SET",
+          method: "Cash",
+          status: "Pending Claim"
+        },
+        {
+          id: "TLC-20230030",
+          student: { name: "Patrick Mendoza", id: "2023-1035", rfid: "X6Y7Z8A9B0" },
+          date: new Date("2025-05-03"),
+          amount: 800.00,
+          type: "PE Uniform SET",
+          method: "GCash",
+          status: "Completed"
+        }
+      ];
+
+      // Current state
+      let currentPage = 1;
+      const itemsPerPage = 10;
+      let currentSort = { field: 'date', direction: 'desc' };
+      let filteredTransactions = [...transactions];
+
+      // Initialize table with data
+      function initTable() {
+        updateDateTime();
+        filterTransactions();
+        setInterval(updateDateTime, 60000); // Update time every minute
+      }
+
+      function updateDateTime() {
+        const now = new Date();
+        document.getElementById('current-date-time').textContent = 
+          now.toLocaleDateString('en-US', { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+      }
+
+      function handleSearchInput() {
+        const searchInput = document.getElementById('searchInput');
+        const searchTerm = searchInput.value.toLowerCase();
+
+        // Check if the search term matches a Student ID or RFID
+        const matchedTransaction = transactions.find(t => 
+          t.student.id.toLowerCase() === searchTerm || 
+          t.student.rfid.toLowerCase() === searchTerm
+        );
+
+        if (matchedTransaction) {
+          // Replace the search input with the student's name
+          searchInput.value = matchedTransaction.student.name;
+        }
+
+        filterTransactions();
+      }
+
+      function filterTransactions() {
+        const dateRange = document.getElementById('dateRange').value;
+        const PaymentFor = document.getElementById('PaymentFor').value;
+        const status = document.getElementById('statusFilter').value;
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        const weekStart = new Date(today);
+        weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+        const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+
+        filteredTransactions = transactions.filter(t => {
+          // Date filter
+          if (dateRange !== 'all') {
+            const transDate = new Date(t.date);
+            transDate.setHours(0, 0, 0, 0);
+            
+            if (dateRange === 'today' && transDate.getTime() !== today.getTime()) return false;
+            if (dateRange === 'yesterday' && transDate.getTime() !== yesterday.getTime()) return false;
+            if (dateRange === 'week' && transDate < weekStart) return false;
+            if (dateRange === 'month' && transDate < monthStart) return false;
+          }
+
+          // Payment type filter
+          if (PaymentFor !== 'all' && t.type !== PaymentFor) return false;
+
+          // Status filter
+          if (status !== 'all' && t.status !== status) return false;
+
+          // Search filter
+          if (searchTerm && 
+              !t.id.toLowerCase().includes(searchTerm) && 
+              !t.student.name.toLowerCase().includes(searchTerm) && 
+              !t.student.id.toLowerCase().includes(searchTerm) &&
+              !t.student.rfid.toLowerCase().includes(searchTerm)) {
+            return false;
+          }
+
+          return true;
+        });
+
+        // Reset to first page when filtering
+        currentPage = 1;
+        sortTransactions();
+        renderTable();
+      }
+
+      function resetFilters() {
+        document.getElementById('dateRange').value = 'all';
+        document.getElementById('PaymentFor').value = 'all';
+        document.getElementById('statusFilter').value = 'all';
+        document.getElementById('searchInput').value = '';
+        filterTransactions();
+      }
+
+      function sortTable(field) {
+        if (currentSort.field === field) {
+          currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+        } else {
+          currentSort.field = field;
+          currentSort.direction = 'asc';
+        }
+        sortTransactions();
+        renderTable();
+        updateSortIcons();
+      }
+
+      function sortTransactions() {
+        filteredTransactions.sort((a, b) => {
+          let valueA, valueB;
+          
+          switch(currentSort.field) {
+            case 'id':
+              valueA = a.id;
+              valueB = b.id;
+              break;
+            case 'student':
+              valueA = a.student.name.toLowerCase();
+              valueB = b.student.name.toLowerCase();
+              break;
+            case 'date':
+              valueA = new Date(a.date);
+              valueB = new Date(b.date);
+              break;
+            case 'amount':
+              valueA = a.amount;
+              valueB = b.amount;
+              break;
+            default:
+              valueA = a.id;
+              valueB = b.id;
+          }
+          
+          if (currentSort.direction === 'asc') {
+            return valueA > valueB ? 1 : -1;
+          } else {
+            return valueA < valueB ? 1 : -1;
+          }
+        });
+      }
+
+      function updateSortIcons() {
+        // Reset all icons
+        document.querySelectorAll('[id^="sortIcon-"]').forEach(icon => {
+          icon.className = 'bx bx-sort-alt-2';
+        });
+        
+        // Set active icon
+        const activeIcon = document.getElementById(`sortIcon-${currentSort.field}`);
+        if (activeIcon) {
+          activeIcon.className = currentSort.direction === 'asc' 
+            ? 'bx bx-sort-up' 
+            : 'bx bx-sort-down';
+        }
+      }
+
+      function renderTable() {
+        const tbody = document.getElementById('transactionBody');
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const paginatedData = filteredTransactions.slice(startIndex, startIndex + itemsPerPage);
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        
+        tbody.innerHTML = paginatedData.map(transaction => {
+          // Check if search term matches student ID or RFID
+          const isIdOrRfidSearch = searchTerm && 
+            (transaction.student.id.toLowerCase().includes(searchTerm) || 
+             transaction.student.rfid.toLowerCase().includes(searchTerm));
+          
+          return `
+            <tr>
+              <td class="py-3 px-4 text-sm">${transaction.id}</td>
+              <td class="py-3 px-4">
+                <div class="flex items-center">
+                  <div>
+                    <p class="text-sm font-medium">${transaction.student.name}</p>
+                    ${!isIdOrRfidSearch ? `<p class="text-xs text-gray-500">${transaction.student.id}</p>` : ''}
+                  </div>
+                </div>
+              </td>
+              <td class="py-3 px-4 text-sm">${transaction.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+              <td class="py-3 px-4 text-sm font-medium">₱${transaction.amount.toFixed(2)}</td>
+              <td class="py-3 px-4 text-sm">${transaction.type}</td>
+              <td class="py-3 px-4 text-sm">${transaction.method}</td>
+              <td class="py-3 px-4 status">
+                <span class="px-2 py-1 text-xs rounded-full ${getStatusClass(transaction.status)}">
+                  ${transaction.status}
+                </span>
+              </td>
+              <td class="py-3 px-4">
+                <div class="flex space-x-1">
+                  <button class="text-blue-600 hover:text-blue-800 p-1 transition-colors" 
+                          title="View Details" 
+                          onclick="viewDetails(this)">
+                    <i class='bx bx-show'></i>
+                  </button>
+                  <button class="text-gray-600 hover:text-gray-800 p-1 transition-colors" 
+                          title="Print Receipt" 
+                          onclick="printReceipt('${transaction.id}')">
+                    <i class='bx bx-printer'></i>
+                  </button>
+                  <button class="text-green-600 hover:text-green-800 p-1 transition-colors" 
+                          title="Mark as Claimed" 
+                          onclick="markAsClaimed(this)">
+                    <i class='bx bx-check-circle'></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        // Update counters
+        const showingCount = paginatedData.length;
+        const totalCount = filteredTransactions.length;
+        document.getElementById('showingCount').textContent = showingCount;
+        document.getElementById('totalCount').textContent = totalCount;
+        document.getElementById('showingCountBottom').textContent = showingCount;
+        document.getElementById('totalCountBottom').textContent = totalCount;
+
+        // Update pagination controls
+        const totalPages = Math.ceil(totalCount / itemsPerPage);
+        document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+        document.getElementById('prevBtn').disabled = currentPage <= 1;
+        document.getElementById('nextBtn').disabled = currentPage >= totalPages;
+      }
+
+      function changePage(delta) {
+        const newPage = currentPage + delta;
+        const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
+        
+        if (newPage > 0 && newPage <= totalPages) {
+          currentPage = newPage;
+          renderTable();
+        }
+      }
+
+      function getStatusClass(status) {
+        const classes = {
+          'Pending Claim': 'bg-yellow-100 text-yellow-800',
+          'Completed': 'bg-blue-100 text-blue-800'
+        };
+        return classes[status] || 'bg-gray-100 text-gray-800';
+      }
+
+      function viewDetails(button) {
+        const row = button.closest('tr');
+        const cells = row.querySelectorAll('td');
+        const modalContent = document.getElementById('modalContent');
+        
+        modalContent.innerHTML = `
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="font-medium">Transaction ID:</p>
+              <p>${cells[0].textContent}</p>
+            </div>
+            <div>
+              <p class="font-medium">Date:</p>
+              <p>${cells[2].textContent}</p>
+            </div>
+            <div>
+              <p class="font-medium">Student Name:</p>
+              <p>${cells[1].querySelector('p.text-sm').textContent}</p>
+            </div>
+            <div>
+              <p class="font-medium">Student ID:</p>
+              <p>${cells[1].querySelector('p.text-xs')?.textContent || transactions.find(t => t.id === cells[0].textContent).student.id}</p>
+            </div>
+            <div>
+              <p class="font-medium">Amount:</p>
+              <p>${cells[3].textContent}</p>
+            </div>
+            <div>
+              <p class="font-medium">Payment Type:</p>
+              <p>${cells[4].textContent}</p>
+            </div>
+            <div>
+              <p class="font-medium">Method:</p>
+              <p>${cells[5].textContent}</p>
+            </div>
+            <div>
+              <p class="font-medium">Status:</p>
+              <p>${cells[6].textContent.trim()}</p>
+            </div>
+          </div>
+        `;
+        
+        const modal = document.getElementById('transactionModal');
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+      }
+
+      function closeModal() {
+        const modal = document.getElementById('transactionModal');
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      }
+
+      function printReceipt(transactionId) {
+        const transaction = transactions.find(t => t.id === transactionId);
+        if (!transaction) return;
+
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+          <html>
+            <head>
+              <title>Receipt for ${transactionId}</title>
+              <style>
+                body { font-family: Arial, sans-serif; padding: 20px; max-width: 500px; margin: 0 auto; }
+                .header { text-align: center; margin-bottom: 20px; }
+                .header h2 { color: #1a365d; margin-bottom: 5px; }
+                .receipt-details { border: 1px solid #eee; padding: 15px; border-radius: 5px; }
+                .receipt-details div { display: flex; justify-content: space-between; margin: 8px 0; }
+                .receipt-details div p:first-child { font-weight: bold; }
+                .footer { margin-top: 20px; text-align: center; font-size: 12px; color: #666; }
+              </style>
+            </head>
+            <body>
+              <div class="header">
+                <h2>Transaction Receipt</h2>
+                <p>${new Date().toLocaleDateString()}</p>
+              </div>
+              
+              <div class="receipt-details">
+                <div>
+                  <p>Transaction ID:</p>
+                  <p>${transaction.id}</p>
+                </div>
+                <div>
+                  <p>Student Name:</p>
+                  <p>${transaction.student.name}</p>
+                </div>
+                <div>
+                  <p>Student ID:</p>
+                  <p>${transaction.student.id}</p>
+                </div>
+                <div>
+                  <p>Date:</p>
+                  <p>${transaction.date.toLocaleDateString()}</p>
+                </div>
+                <div>
+                  <p>Amount:</p>
+                  <p>₱${transaction.amount.toFixed(2)}</p>
+                </div>
+                <div>
+                  <p>Payment Type:</p>
+                  <p>${transaction.type}</p>
+                </div>
+                <div>
+                  <p>Method:</p>
+                  <p>${transaction.method}</p>
+                </div>
+                <div>
+                  <p>Status:</p>
+                  <p>${transaction.status}</p>
+                </div>
+              </div>
+              
+              <div class="footer">
+                <p>Thank you for your payment!</p>
+                <p>Generated on ${new Date().toLocaleString()}</p>
+              </div>
+              
+              <script>
+                window.onload = function() { window.print(); setTimeout(() => window.close(), 500); }
+              <\/script>
+            </body>
+          </html>
+        `);
+        printWindow.document.close();
+      }
+
+      function markAsClaimed(button) {
+        if (confirm('Are you sure you want to mark this transaction as Completed?')) {
+          const statusSpan = button.closest('tr').querySelector('.status span');
+          statusSpan.className = 'px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800';
+          statusSpan.textContent = 'Completed';
+          // Here you would typically make an API call to update the status in your DB
+        }
+      }
+
+      function exportData() {
+        // Convert filtered data to CSV
+        const headers = ['Transaction ID', 'Student Name', 'Student ID', 'Date', 'Amount', 'Payment Type', 'Method', 'Status'];
+        const csvRows = [
+          headers.join(','),
+          ...filteredTransactions.map(t => 
+            [
+              `"${t.id}"`,
+              `"${t.student.name}"`,
+              `"${t.student.id}"`,
+              `"${t.date.toLocaleDateString()}"`,
+              `"₱${t.amount.toFixed(2)}"`,
+              `"${t.type}"`,
+              `"${t.method}"`,
+              `"${t.status}"`
+            ].join(',')
+          )
+        ];
+        
+        const csvContent = csvRows.join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        
+        // Create download link
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `transactions_${new Date().toISOString().slice(0,10)}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      function printTable() {
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>Transactions Report</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; }
+          h1 { text-align: center; color: #1a365d; }
+          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+          th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+          th { background-color: #f2f2f2; }
+          .footer { margin-top: 20px; text-align: right; font-size: 12px; color: #666; }
+          .status-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+          .bg-yellow-100 { background-color: #fef9c3; color: #a16207; }
+          .bg-blue-100 { background-color: #dbeafe; color: #1e40af; }
+        </style>
+      </head>
+      <body>
+        <h1>Transactions Report</h1>
+        <p>Generated on ${new Date().toLocaleDateString('en-US', {
+          weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+        })}</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Transaction ID</th>
+              <th>Student</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Payment For</th>
+              <th>Method</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filteredTransactions.map(t => {
+              let statusClass = '';
+              if (t.status === 'Pending Claim') statusClass = 'bg-yellow-100';
+              else if (t.status === 'Completed') statusClass = 'bg-blue-100';
+
+              return `
+                <tr>
+                  <td>${t.id}</td>
+                  <td>${t.student.name} (${t.student.id})</td>
+                  <td>${new Date(t.date).toLocaleDateString()}</td>
+                  <td>₱${t.amount.toFixed(2)}</td>
+                  <td>${t.type}</td>
+                  <td>${t.method}</td>
+                  <td><span class="status-badge ${statusClass}">${t.status}</span></td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+        <div class="footer">
+          <p>Total: ${filteredTransactions.length} transactions</p>
+        </div>
+        <script>
+          window.onload = function() { window.print(); setTimeout(() => window.close(), 500); }
+        <\/script>
+      </body>
+    </html>
+  `);
+  printWindow.document.close();
+}
+
+      // Close modal when clicking outside
+      window.onclick = function(event) {
+        const modal = document.getElementById('transactionModal');
+        if (event.target === modal) {
+          closeModal();
+        }
+      };
+
+      // Initialize the table on page load
+      document.addEventListener('DOMContentLoaded', initTable);
+    </script>
+  </div>
+
+</body>
+</html>
