@@ -4,23 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout - TLC Smart Payment Kiosk</title>
-  <link href="/src/output.css" rel="stylesheet">
+  <link href="src/output.css" rel="stylesheet">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="src/styles.css">
+  <link rel="icon" href="../src/img/tlc_logo.png" type="image/x-icon">
+
 </head>
 <body class="bg-gray-100 h-screen">
   <div class="container mx-auto p-4 h-full flex flex-col">
     <!-- Header -->
     <header class="bg-blue-700 text-white p-4 rounded-t-lg shadow-md flex items-center justify-between">
       <div class="flex items-center">
-        <img src="/src/img/tlc_logo.png?height=60&width=60" alt="TLC Logo" class="h-12 mr-3">
+        <img src="src/img/tlc_logo.png?height=60&width=60" alt="TLC Logo" class="h-12 mr-3">
         <div>
           <h1 class="text-2xl font-bold">The Lewis College</h1>
           <p class="text-sm">Smart RFID Payment Kiosk</p>
         </div>
       </div>
       <div class="text-right">
-        <p class="text-sm">April 17, 2025 4:26 PM</p>
+        <p class="text-sm" id="current-date-time">Loading date and time...</p>
       </div>
     </header>
 
@@ -28,10 +30,12 @@
     <main class="flex-grow flex flex-col bg-white rounded-b-lg shadow-md overflow-hidden">
       <div class="p-6">
         <div class="flex items-center mb-6">
-          <button id="back-btn" class="mr-4 bg-gray-200 p-2 rounded-full hover:bg-gray-300">
-            <i class='bx bx-arrow-back text-xl'></i>
-          </button>
-          <h2 class="text-2xl font-bold text-gray-800">Checkout</h2>
+          <a href="payment-options.html">
+            <button id="back-btn" class="mr-4 bg-gray-200 p-3 rounded-full hover:bg-gray-300 flex items-center justify-center w-10 h-10">
+              <i class='bx bx-arrow-back'></i>
+            </button>
+          </a>
+          <h2 class="text-2xl font-bold text-gray-800">Check Out</h2>
         </div>
 
         <div class="bg-blue-50 p-4 rounded-lg mb-6">
@@ -40,11 +44,9 @@
             <div>
               <h3 class="font-bold text-blue-800">Student Information</h3>
               <div class="flex flex-wrap">
-                <p class="text-blue-700 text-sm mr-4"><span class="font-medium">Name:</span> <span>Juan Dela Cruz</span></p>
-                <p class="text-blue-700 text-sm mr-4"><span class="font-medium">ID:</span> <span>C-2023-12345</span></p>
-                <p class="text-blue-700 text-sm mr-4"><span class="font-medium">Course:</span> <span> BSIT</span></p>
-                <p class="text-blue-700 text-sm mr-4"><span class="font-medium">Year Level:</span> <span>2nd Year</span></p>
-                <p class="text-blue-700 text-sm"><span class="font-medium">Email:</span> <span>juan.delacruz@student.tlc.edu.ph</span></p>
+                <p class="text-blue-700 text-sm mr-4"><span class="font-medium">Name:</span> <span id="student-name">John Doe</span></p>
+                <p class="text-blue-700 text-sm mr-4"><span class="font-medium">ID:</span> <span id="student-id">2023-12345</span></p>
+                <p class="text-blue-700 text-sm"><span class="font-medium">Course:</span> <span id="student-course">BSIT</span></p>
               </div>
             </div>
           </div>
@@ -52,32 +54,25 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <!-- Order Summary -->
-          <div class="bg-white border border-gray-200 rounded-lg p-5">
+            <div class="bg-white border border-gray-200 rounded-lg p-5">
             <h3 class="font-bold text-gray-800 mb-4">Order Summary</h3>
             
             <div id="checkout-items" class="space-y-3 mb-4">
               <!-- Items will be populated dynamically -->
               <div class="flex justify-between pb-3 border-b">
-                <div>
-                  <p class="font-medium">PE Uniform (Shirt)</p>
-                  <p class="text-sm text-gray-500">Size: Medium</p>
-                </div>
-                <p class="font-bold">₱350.00</p>
+              <div>
+                <p class="font-medium">Intramurals T-Shirt</p>
+                <p class="text-sm text-gray-500">Size: Medium</p>
               </div>
-              <div class="flex justify-between pb-3 border-b">
-                <div>
-                  <p class="font-medium">PE Uniform (Shorts)</p>
-                  <p class="text-sm text-gray-500">Size: Medium</p>
-                </div>
-                <p class="font-bold">₱300.00</p>
+              <p class="font-bold">₱450.00</p>
               </div>
             </div>
             
             <div class="flex justify-between pt-3 border-t">
               <p class="font-bold text-gray-800">Total:</p>
-              <p class="font-bold text-xl text-blue-600" id="checkout-total">₱650.00</p>
+              <p class="font-bold text-xl text-blue-600" id="checkout-total">₱450.00</p>
             </div>
-          </div>
+            </div>
 
           <!-- Payment Method -->
           <div class="bg-white border border-gray-200 rounded-lg p-4">
@@ -94,28 +89,54 @@
                 <i class='bx bx-credit-card text-blue-500 text-2xl mr-2'></i>
                 <span>Credit/Debit Card</span>
               </label>
-              <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer">
-                <input type="radio" name="payment-method" value="bank" class="mr-3">
-                <i class='bx bxs-bank text-blue-500 text-2xl mr-2'></i>
-                <span>Online Banking</span>
-              </label>
+                <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer">
+                <input type="radio" name="payment-method" value="cash" class="mr-3">
+                <i class='bx bxs-wallet text-blue-500 text-2xl mr-2'></i>
+                <span>Cash</span>
+                </label>
             </div>
 
             <div class="mb-5">
               <h4 class="font-medium text-gray-700 mb-2">Email Receipt To:</h4>
-              <input type="email" id="receipt-email" class="w-full p-2 border border-gray-300 rounded-lg" value="john.doe@student.tlc.edu.ph">
+              <input
+                type="email"
+                id="receipt-email"
+                class="w-full p-2 border border-gray-300 rounded-lg"
+                value="john.doe@student.thelewiscollege.edu.ph"
+                placeholder="Enter email"
+              >
+            
               <div class="flex items-center mt-2">
                 <input type="checkbox" id="auto-print-receipt" class="mr-2" checked>
                 <label for="auto-print-receipt" class="text-sm text-gray-600">Automatically print receipt</label>
               </div>
             </div>
+            
+            <script>
+              const emailInput = document.getElementById('receipt-email');
+            
+              // When the input is tapped/focused, this encourages OSK to show
+              emailInput.addEventListener('touchstart', () => {
+                setTimeout(() => {
+                  emailInput.focus();
+                }, 100);
+              });
+            
+              // Optional fallback alert if keyboard doesn’t show after focus
+              emailInput.addEventListener('focus', () => {
+                // You can put logic here if needed
+                console.log('Input focused – OS should show keyboard on touchscreens.');
+              });
+            </script>
+            
 
             <div class="flex justify-between items-center">
-              <button id="cancel-payment-btn" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+              <a href="payment-options.html" id="cancel-payment-btn" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 inline-block text-center">
                 Cancel
-              </button>
+              </a>
+              
                 <button id="processing-modal-btn" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
-                Pay ₱650.00
+                Pay ₱450.00
                 </button>
               </div>
             </div>
@@ -130,16 +151,33 @@
           </div>
 
           <!-- Payment Processing Modal -->
-            <div id="processing-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="display: none;">
+          <div id="processing-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
             <div class="bg-white rounded-lg p-8 w-full max-w-md text-center">
-              <div class="mb-6">
-              <i class='bx bx-loader-alt text-blue-600 text-6xl'></i>
-              </div>
-              <h2 class="text-2xl font-bold text-gray-800 mb-4">Processing Payment</h2>
-              <p class="text-gray-600 mb-2">Please wait while we process your payment...</p>
-              <p class="text-sm text-gray-500">Do not close this window or navigate away.</p>
+            <div class="animate-spin mb-6">
+            <i class='bx bx-loader-alt text-blue-600 text-6xl'></i>
             </div>
-            </div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Processing Payment</h2>
+            <p class="text-gray-600 mb-2">Please wait while we process your payment...</p>
+            <p class="text-sm text-gray-500">Do not close this window or navigate away.</p>
           </div>
+          </div>
+<script>
+  const modal = document.getElementById('processing-modal');
+  const openBtn = document.getElementById('processing-modal-btn');
+
+  openBtn.addEventListener('click', function() {
+    modal.classList.remove('hidden');
+  });
+
+  // Redirect to index.html when clicking outside the modal content3320625758
+  modal.addEventListener('click', function(e) {
+    // Make sure the click was on the background, not inside the modal box
+    if (e.target === modal) {
+      window.location.href = 'payment_receipt.php';
+    }
+  });
+</script>
+
+  <script src="js/main.js"></script>
 </body>
 </html>
