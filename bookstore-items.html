@@ -4,36 +4,38 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bookstore Items - TLC Smart Payment Kiosk</title>
-  <link href="src/output.css" rel="stylesheet">
+  <link href="src/output.css" rel="stylesheet">    
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="src/styles.css">
+  <link rel="icon" href="src/img/tlc_logo.png" type="image/x-icon">
+
 </head>
 <body class="bg-gray-100 h-screen">
-  <div class="container mx-auto p-4 h-full flex flex-col">
+  <div class="container mx-auto p-4 h-full flex flex-col max-w-6xl">
     <!-- Header -->
     <header class="bg-blue-700 text-white p-4 rounded-t-lg shadow-md flex items-center justify-between">
       <div class="flex items-center">
-        <img src="/src/img/tlc_logo.png?height=60&width=60" alt="TLC Logo" class="h-12 mr-3">
+        <img src="src/img/tlc_logo.png?height=60&width=60" alt="TLC Logo" class="h-12 mr-3">
         <div>
           <h1 class="text-2xl font-bold">The Lewis College</h1>
           <p class="text-sm">Smart RFID Payment Kiosk</p>
         </div>
       </div>
       <div class="text-right">
-        <p class="text-sm">April 17, 2025 4:26 PM</p>
+        <p class="text-sm" id="current-date-time">Loading date and time...</p>
       </div>
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow flex flex-col bg-white rounded-b-lg shadow-md overflow-hidden">
-      <div class="p-6">
+    <main class="flex-grow flex flex-col bg-white rounded-b-lg shadow-md overflow-hidden main-content">
+      <div class="p-6 flex-grow">
         <div class="flex items-center mb-6">
           <a href="payment-options.html">
-            <button class="mr-4 bg-gray-200 p-2 rounded-full hover:bg-gray-300">
-              <i class='bx bx-arrow-back text-xl'></i>
+            <button id="back-btn" class="mr-4 bg-gray-200 p-3 rounded-full hover:bg-gray-300 flex items-center justify-center w-10 h-10">
+              <i class='bx bx-arrow-back'></i>
             </button>
           </a>
-          <h2 class="text-2xl font-bold text-gray-800">Bookstore Items</h2>
+          <h2 class="text-2xl font-bold text-gray-800">Bookstore Payments</h2>
         </div>
 
         <div class="bg-blue-50 p-4 rounded-lg mb-6">
@@ -41,85 +43,107 @@
             <i class='bx bx-info-circle text-blue-600 text-2xl mr-3 mt-1'></i>
             <div>
               <h3 class="font-bold text-blue-800">Student Information</h3>
-                <div class="flex flex-wrap"></div>
-                <p class="text-blue-700 text-sm mr-4"><span class="font-medium">Name:</span> <span>Juan Dela Cruz</span></p>
-                <p class="text-blue-700 text-sm mr-4"><span class="font-medium">ID:</span> <span>C-2023-12345</span></p>
-                <p class="text-blue-700 text-sm mr-4"><span class="font-medium">Course:</span> <span> BSIT</span></p>
-                <p class="text-blue-700 text-sm mr-4"><span class="font-medium">Year Level:</span> <span>2nd Year</span></p>
-                <p class="text-blue-700 text-sm"><span class="font-medium">Email:</span> <span>juan.delacruz@student.tlc.edu.ph</span></p>
-                </div>
+              <div class="flex flex-wrap">
+                <p class="text-blue-700 text-sm mr-4"><span class="font-medium">Name:</span> <span id="student-name">John Doe</span></p>
+                <p class="text-blue-700 text-sm mr-4"><span class="font-medium">ID:</span> <span id="student-id">2023-12345</span></p>
+                <p class="text-blue-700 text-sm"><span class="font-medium">Course:</span> <span id="student-course">BSIT</span></p>
+              </div>
             </div>
+          </div>
         </div>
 
         <!-- Category Tabs -->
-        <div class="mb-6 overflow-x-auto"></div>
-          <div class="flex space-x-2 min-w-max"></div>
-            <button class="category-btn active px-4 py-2 rounded-lg bg-blue-600 text-white">All Items</button>
-            <button class="category-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300">Uniforms</button>
-            <button class="category-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300">Books</button>
-            <button class="category-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300">School Supplies</button>
-            <button class="category-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300">PE Uniforms</button>
-            <button class="category-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300">ID & Lanyards</button>
+        <div class="mb-6 overflow-x-auto">
+          <div class="flex space-x-2 min-w-max">
+            <button class="category-btn active px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700" data-category="all">All Items</button>
+            <button class="category-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300" data-category="uniforms">Uniforms</button>
+            <button class="category-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300" data-category="id-lanyards">ID & Lanyards</button>
+          </div>
         </div>
 
         <!-- Items Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <!-- Item 1 - Uniform -->
-          <div class="bg-white border border-gray-200 rounded-lg overflow-hidden item uniform">
+          <!-- Item 1 - Polo Uniform -->
+          <div class="bg-white border border-gray-200 rounded-lg overflow-hidden item uniform" data-category="uniforms">
             <div class="p-4">
               <div class="flex items-start">
-                <img src="/placeholder.svg?height=80&width=80" alt="Uniform Shirt" class="w-20 h-20 object-cover rounded-md mr-4">
+                <i class='bx bx-t-shirt text-gray-600 text-5xl w-20 h-20 flex items-center justify-center rounded-md mr-4 bg-gray-100'></i>
                 <div>
-                  <h4 class="font-bold text-gray-800">Uniform Shirt</h4>
+                  <h4 class="font-bold text-gray-800">Polo Uniform</h4>
                   <p class="text-sm text-gray-500 mb-2">Available sizes: S, M, L, XL</p>
                   <p class="font-bold text-blue-600">₱300.00</p>
                 </div>
               </div>
             </div>
             <div class="bg-gray-50 p-3 flex justify-between items-center">
-              <button class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm">Add to Cart</button>
+              <button class="add-to-cart-btn bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm" data-id="polo-uniform" data-price="300" data-name="Polo Uniform">
+                Add to Cart
+              </button>
             </div>
           </div>
 
-          <!-- Item 2 - Book -->
-          <div class="bg-white border border-gray-200 rounded-lg overflow-hidden item books">
+          <!-- Item 2 - PE Uniform Pants -->
+          <div class="bg-white border border-gray-200 rounded-lg overflow-hidden item uniform" data-category="uniforms">
             <div class="p-4">
               <div class="flex items-start">
-                <img src="/placeholder.svg?height=80&width=80" alt="Math Book" class="w-20 h-20 object-cover rounded-md mr-4">
+                <i class='bx bx-pants text-gray-600 text-5xl w-20 h-20 flex items-center justify-center rounded-md mr-4 bg-gray-100'></i>
                 <div>
-                  <h4 class="font-bold text-gray-800">Math Book</h4>
-                  <p class="text-sm text-gray-500 mb-2">Author: John Doe</p>
-                  <p class="font-bold text-blue-600">₱500.00</p>
+                  <h4 class="font-bold text-gray-800">PE Uniform (Pants)</h4>
+                  <p class="text-sm text-gray-500 mb-2">Available sizes: S, M, L, XL</p>
+                  <p class="font-bold text-blue-600">₱300.00</p>
                 </div>
               </div>
             </div>
             <div class="bg-gray-50 p-3 flex justify-between items-center">
-              <button class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm">Add to Cart</button>
+              <button class="add-to-cart-btn bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm" data-id="pe-pants" data-price="300" data-name="PE Uniform (Pants)">
+                Add to Cart
+              </button>
             </div>
           </div>
 
-          <!-- Item 3 - School Supplies -->
-          <div class="bg-white border border-gray-200 rounded-lg overflow-hidden item supplies">
+          <!-- Item 3 - PE Uniform Set -->
+          <div class="bg-white border border-gray-200 rounded-lg overflow-hidden item uniform" data-category="uniforms">
             <div class="p-4">
               <div class="flex items-start">
-                <img src="/placeholder.svg?height=80&width=80" alt="School Notebook" class="w-20 h-20 object-cover rounded-md mr-4">
+                <i class='bx bx-t-shirt text-gray-600 text-5xl w-20 h-20 flex items-center justify-center rounded-md mr-4 bg-gray-100'></i>
                 <div>
-                  <h4 class="font-bold text-gray-800">School Notebook</h4>
-                  <p class="text-sm text-gray-500 mb-2">100 pages</p>
-                  <p class="font-bold text-blue-600">₱50.00</p>
+                  <h4 class="font-bold text-gray-800">PE Uniform (Set)</h4>
+                  <p class="text-sm text-gray-500 mb-2">Available sizes: S, M, L, XL</p>
+                  <p class="font-bold text-blue-600">₱600.00</p>
                 </div>
               </div>
             </div>
             <div class="bg-gray-50 p-3 flex justify-between items-center">
-              <button class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm">Add to Cart</button>
+              <button class="add-to-cart-btn bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm" data-id="pe-set" data-price="600" data-name="PE Uniform (Set)">
+                Add to Cart
+              </button>
             </div>
           </div>
 
-          <!-- Item 4 - PE Uniform -->
-          <div class="bg-white border border-gray-200 rounded-lg overflow-hidden item pe-uniforms">
+          <!-- Item 4 - Blouse and Skirt Uniform -->
+          <div class="bg-white border border-gray-200 rounded-lg overflow-hidden item uniform" data-category="uniforms">
             <div class="p-4">
               <div class="flex items-start">
-                <img src="/placeholder.svg?height=80&width=80" alt="PE Uniform" class="w-20 h-20 object-cover rounded-md mr-4">
+                <i class='bx bx-female text-gray-600 text-5xl w-20 h-20 flex items-center justify-center rounded-md mr-4 bg-gray-100'></i>
+                <div>
+                  <h4 class="font-bold text-gray-800">Blouse and Skirt Uniform</h4>
+                  <p class="text-sm text-gray-500 mb-2">Available sizes: S, M, L, XL</p>
+                  <p class="font-bold text-blue-600">₱300.00</p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-50 p-3 flex justify-between items-center">
+              <button class="add-to-cart-btn bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm" data-id="blouse-skirt" data-price="300" data-name="Blouse and Skirt Uniform">
+                Add to Cart
+              </button>
+            </div>
+          </div>
+
+          <!-- Item 5 - PE Uniform Shirt -->
+          <div class="bg-white border border-gray-200 rounded-lg overflow-hidden item pe-uniforms" data-category="uniforms">
+            <div class="p-4">
+              <div class="flex items-start">
+                <i class='bx bx-t-shirt text-gray-600 text-5xl w-20 h-20 flex items-center justify-center rounded-md mr-4 bg-gray-100'></i>
                 <div>
                   <h4 class="font-bold text-gray-800">PE Uniform (Shirt)</h4>
                   <p class="text-sm text-gray-500 mb-2">Available sizes: S, M, L, XL</p>
@@ -128,24 +152,66 @@
               </div>
             </div>
             <div class="bg-gray-50 p-3 flex justify-between items-center">
-              <button class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm">Add to Cart</button>
+              <button class="add-to-cart-btn bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm" data-id="pe-shirt" data-price="350" data-name="PE Uniform (Shirt)">
+                Add to Cart
+              </button>
             </div>
           </div>
 
-          <!-- Item 5 - ID Lanyard -->
-          <div class="bg-white border border-gray-200 rounded-lg overflow-hidden item id-lanyards">
+          <!-- Item 6 - CTE Lanyard -->
+          <div class="bg-white border border-gray-200 rounded-lg overflow-hidden item cte-lanyard" data-category="id-lanyards">
             <div class="p-4">
               <div class="flex items-start">
-                <img src="/placeholder.svg?height=80&width=80" alt="ID Lanyard" class="w-20 h-20 object-cover rounded-md mr-4">
+                <i class='bx bx-id-card text-gray-600 text-5xl w-20 h-20 flex items-center justify-center rounded-md mr-4 bg-gray-100'></i>
                 <div>
-                  <h4 class="font-bold text-gray-800">ID Lanyard</h4>
+                  <h4 class="font-bold text-gray-800">CTE ID Lanyard</h4>
                   <p class="text-sm text-gray-500 mb-2">Material: Nylon</p>
                   <p class="font-bold text-blue-600">₱120.00</p>
                 </div>
               </div>
             </div>
             <div class="bg-gray-50 p-3 flex justify-between items-center">
-              <button class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm">Add to Cart</button>
+              <button class="add-to-cart-btn bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm" data-id="cte-lanyard" data-price="120" data-name="CTE ID Lanyard">
+                Add to Cart
+              </button>
+            </div>
+          </div>
+
+          <!-- Item 7 - CBE Lanyard -->
+          <div class="bg-white border border-gray-200 rounded-lg overflow-hidden item cbe-lanyard" data-category="id-lanyards">
+            <div class="p-4">
+              <div class="flex items-start">
+                <i class='bx bx-id-card text-gray-600 text-5xl w-20 h-20 flex items-center justify-center rounded-md mr-4 bg-gray-100'></i>
+                <div>
+                  <h4 class="font-bold text-gray-800">CBE ID Lanyard</h4>
+                  <p class="text-sm text-gray-500 mb-2">Material: Nylon</p>
+                  <p class="font-bold text-blue-600">₱120.00</p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-50 p-3 flex justify-between items-center">
+              <button class="add-to-cart-btn bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm" data-id="cbe-lanyard" data-price="120" data-name="CBE ID Lanyard">
+                Add to Cart
+              </button>
+            </div>
+          </div>
+
+          <!-- Item 8 - CCS Lanyard -->
+          <div class="bg-white border border-gray-200 rounded-lg overflow-hidden item ccs-lanyard" data-category="id-lanyards">
+            <div class="p-4">
+              <div class="flex items-start">
+                <i class='bx bx-id-card text-gray-600 text-5xl w-20 h-20 flex items-center justify-center rounded-md mr-4 bg-gray-100'></i>
+                <div>
+                  <h4 class="font-bold text-gray-800">CCS ID Lanyard</h4>
+                  <p class="text-sm text-gray-500 mb-2">Material: Nylon</p>
+                  <p class="font-bold text-blue-600">₱120.00</p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-50 p-3 flex justify-between items-center">
+              <button class="add-to-cart-btn bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm" data-id="ccs-lanyard" data-price="120" data-name="CCS ID Lanyard">
+                Add to Cart
+              </button>
             </div>
           </div>
         </div>
@@ -153,22 +219,25 @@
         <!-- Fixed Cart Section on the Right Side -->
         <div class="fixed right-0 bottom-0 bg-white border-t border-gray-200 p-4 mb-6 shadow-lg w-1/4">
           <h3 class="font-bold text-gray-800 mb-3 flex items-center">
-            <i class='bx bx-cart text-blue-600 mr-2'></i> Your Cart
-          </h3>
-          <div class="mb-4">
-            <div class="text-gray-500 text-center py-4" >Your cart is empty. Add items to proceed.</div>
-          </div>
-          <div class="flex justify-between items-center border-t pt-3">
-            <div>
-              <p class="text-gray-600">Total:</p>
-              <p class="font-bold text-blue-600">₱<span >0.00</span></p>
-            </div>
-            <a href="payment-checkout.html">
-              <button class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                Proceed to Checkout
-              </button>
-            </a>
-          </div>
+                <i class='bx bx-cart text-blue-600 mr-2'></i> Your Cart
+              </h3>
+              
+              <div id="cart-items" class="mb-4 max-h-60 overflow-y-auto">
+                <!-- Cart items will be added here dynamically -->
+                <div class="text-gray-500 text-center py-4" id="empty-cart-message">Your cart is empty. Add items to proceed.</div>
+              </div>
+              
+              <div class="flex justify-between items-center border-t pt-3">
+                <div>
+                  <p class="text-gray-600">Total:</p>
+                  <p class="font-bold text-blue-600">₱<span id="cart-total">0.00</span></p>
+                </div>
+                <a href="payment-checkout.html">
+                  <button id="checkout-btn" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    Proceed to Checkout
+                  </button>
+                </a>
+              </div>
         </div>
       </div>
     </main>
@@ -179,5 +248,91 @@
       <p>Smart RFID-Authenticated Self-Service Payment Kiosk</p>
     </footer>
   </div>
+
+  <script>
+    // Category Filtering Logic
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    const items = document.querySelectorAll('.item');
+
+    categoryButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Toggle active class on buttons
+        categoryButtons.forEach(btn => {
+          btn.classList.remove('active', 'bg-blue-600', 'text-white');
+          btn.classList.add('bg-gray-200', 'hover:bg-gray-300');
+        });
+        button.classList.remove('bg-gray-200', 'hover:bg-gray-300');
+        button.classList.add('active', 'bg-blue-600', 'text-white');
+
+        const category = button.dataset.category;
+        
+        // Show/Hide items based on category
+        items.forEach(item => {
+          if (category === 'all' || item.dataset.category === category) {
+            item.classList.remove('hidden');
+          } else {
+            item.classList.add('hidden');
+          }
+        });
+      });
+    });
+
+    // Add to Cart Logic
+    const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartTotal = document.getElementById('cart-total');
+    let cart = [];
+
+    addToCartButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const itemId = button.dataset.id;
+        const itemPrice = parseFloat(button.dataset.price);
+        const itemName = button.dataset.name;
+
+        // Add item to cart
+        const existingItemIndex = cart.findIndex(item => item.id === itemId);
+        if (existingItemIndex >= 0) {
+          cart[existingItemIndex].quantity += 1;
+        } else {
+          cart.push({ id: itemId, name: itemName, price: itemPrice, quantity: 1 });
+        }
+
+        // Update cart display and total
+        updateCart();
+      });
+    });
+
+    // Remove item from cart
+    function removeItem(id) {
+      cart = cart.filter(item => item.id !== id);
+      updateCart();
+    }
+
+    // Update cart display
+    function updateCart() {
+      cartItemsContainer.innerHTML = '';
+      let total = 0;
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<div class="text-gray-500 text-center py-4">Your cart is empty. Add items to proceed.</div>';
+      } else {
+        cart.forEach(item => {
+          total += item.price * item.quantity;
+          cartItemsContainer.innerHTML += `
+            <div class="flex justify-between items-center mb-3">
+              <p class="text-sm">${item.name} - ${item.quantity} x ₱${item.price.toFixed(2)}</p>
+              <p class="text-sm font-bold">₱${(item.price * item.quantity).toFixed(2)}</p>
+              <button class="text-red-500 text-sm hover:text-red-700" onclick="removeItem('${item.id}')"><i class='bx bx-trash'></i></button>
+            </div>
+          `;
+        });
+      }
+
+      cartTotal.textContent = total.toFixed(2);
+
+      // Enable/Disable checkout button
+      document.getElementById('checkout-btn').disabled = cart.length === 0;
+    }
+  </script>
 </body>
 </html>

@@ -4,29 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Payment Success - TLC Smart Payment Kiosk</title>
-  <link href="/src/output.css" rel="stylesheet">
+  <link href="src/output.css" rel="stylesheet">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="src/styles.css">
+  <link rel="icon" href="../src/img/tlc_logo.png" type="image/x-icon">
+
 </head>
 <body class="bg-gray-100 h-screen">
   <div class="container mx-auto p-4 h-full flex flex-col">
     <!-- Header -->
     <header class="bg-blue-700 text-white p-4 rounded-t-lg shadow-md flex items-center justify-between">
       <div class="flex items-center">
-        <img src="/src/img/tlc_logo.png?height=60&width=60" alt="TLC Logo" class="h-12 mr-3">
+        <img src="src/img/tlc_logo.png?height=60&width=60" alt="TLC Logo" class="h-12 mr-3">
         <div>
           <h1 class="text-2xl font-bold">The Lewis College</h1>
           <p class="text-sm">Smart RFID Payment Kiosk</p>
         </div>
       </div>
       <div class="text-right">
-        <p class="text-sm">April 17, 2025 4:26 PM</p>
+        <p class="text-sm" id="current-date-time">Loading date and time...</p>
       </div>
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow flex flex-col bg-white rounded-b-lg shadow-md overflow-hidden">
-      <div class="p-6 flex flex-col items-center justify-center text-center flex-grow">
+    <main class="flex-grow flex flex-col bg-white rounded-b-lg shadow-md ">
+      <div class="p-6 flex flex-col items-center justify-center text-center flex-grow mb-6">
         <div class="bg-green-100 p-6 rounded-full mb-6">
           <i class='bx bx-check-circle text-green-600 text-6xl'></i>
         </div>
@@ -42,11 +44,19 @@
             </div>
             <div class="flex justify-between">
               <span class="text-gray-500">Date & Time:</span>
-              <span class="font-medium" id="receipt-date-time">April 17, 2025 4:26 PM</span>
+              <span class="font-medium" id="receipt-date-time"></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">Student Name:</span>
+              <span class="font-medium" id="receipt-student-name">John Doe</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">Item:</span>
+              <span class="font-medium" id="receipt-item">Intramurals T-shirt</span>
             </div>
             <div class="flex justify-between">
               <span class="text-gray-500">Amount Paid:</span>
-              <span class="font-medium" id="receipt-amount">₱650.00</span>
+              <span class="font-medium" id="receipt-amount">₱450.00</span>
             </div>
             <div class="flex justify-between">
               <span class="text-gray-500">Payment Method:</span>
@@ -55,17 +65,17 @@
           </div>
         </div>
         
-        <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 w-full max-w-md">
-          <button id="view-receipt-btn" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center">
-            <i class='bx bx-receipt mr-2'></i> View Receipt
-          </button>
-          <button id="new-transaction-btn" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center">
+        <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 w-full max-w-md justify-center mb-6">
+            <a href="payment-options.html" id="new-transaction-btn" class="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center">
             <i class='bx bx-refresh mr-2'></i> New Transaction
-          </button>
+            </a>
+            <a href="index.html" id="done-btn" class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center">
+            <i class='bx bx-check mr-2'></i> Done
+            </a>
         </div>
         
         <p class="text-sm text-gray-500 mt-6">
-          A receipt has been automatically printed and sent to your email.
+          A receipt has been automatically printed. Please check your email for a digital copy.
         </p>
       </div>
     </main>
@@ -76,7 +86,22 @@
       <p>Smart RFID-Authenticated Self-Service Payment Kiosk</p>
     </footer>
   </div>
-
- 
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const now = new Date();
+      const formattedDate = now.toLocaleDateString('en-PH', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+  
+      // Update receipt date
+      const receiptDateTime = document.getElementById('receipt-date-time');
+      if (receiptDateTime) receiptDateTime.textContent = formattedDate;
+    });
+  </script>
+  
+  
+  <script src="js\main.js"></script>
 </body>
 </html>

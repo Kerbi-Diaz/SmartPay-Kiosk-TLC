@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -7,67 +6,67 @@
   <link href="src/output.css" rel="stylesheet">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="/src/img/tlc_logo.png" type="image/x-icon">
+
 </head>
 <body class="bg-gray-100 h-screen">
   <div class="container mx-auto p-4 h-full flex flex-col">
     <!-- Header -->
     <header class="bg-blue-700 text-white p-4 rounded-t-lg shadow-md flex items-center justify-between">
       <div class="flex items-center">
-        <img src="/src/img/tlc_logo.png?height=60&width=60" alt="TLC Logo" class="h-12 mr-3">
+        <img src="src/img/tlc_logo.png?height=60&width=60" alt="TLC Logo" class="h-12 mr-3">
         <div>
           <h1 class="text-2xl font-bold">The Lewis College</h1>
           <p class="text-sm">Smart RFID Payment Kiosk</p>
         </div>
       </div>
       <div class="text-right">
-        <p class="text-sm">April 17, 2025 4:26 PM</p>
+        <p class="text-sm" id="current-date-time">Loading date and time...</p>
       </div>
     </header>
-<main class="flex-grow flex flex-col bg-white rounded-b-lg shadow-md overflow-hidden">
-  <div class="flex-grow flex-col p-6">
-    <div class="bg-blue-50 p-4 rounded-lg mb-6 flex items-start">
-      <i class='bx bx-info-circle text-blue-600 text-2xl mr-3 mt-1'></i>
-      <div>
-        <h3 class="font-bold text-blue-800">Student Information</h3>
-        <p class="text-blue-700 text-sm">Please verify your information below before proceeding.</p>
-      </div>
-    </div>
+    <main class="flex-grow flex flex-col bg-white rounded-b-lg shadow-md overflow-hidden">
+      <div class="flex-grow flex flex-col items-center justify-center p-8 text-center">
+        <div class="bg-blue-50 p-4 rounded-lg mb-6 flex items-start">
+          <i class='bx bx-info-circle text-blue-600 text-2xl mr-3 mt-1'></i>
+          <div>
+            <h3 class="font-bold text-blue-800">Student Information</h3>
+            <p class="text-blue-700 text-sm">Please verify your information below before proceeding.</p>
+          </div>
+        </div>
 
-    <div class="grid md:grid-cols-1 gap-6 mb-6 pl-4">
-      <div class="bg-gray-50 p-4 rounded-lg">
-      <div class="flex items-start mb-8">
-        <img src="src/img/ID.jpg" alt="Student Photo" class="w-32 h-32 rounded-lg mr-6 object-cover border-2 border-blue-500">
-        <div>
-          <h3 class="text-2xl font-bold text-gray-800">Juan Dela Cruz</h3>
-          <p class="text-lg text-gray-600">Student ID: 2023-12345</p>
-          <p class="text-lg text-gray-600">Course: BS Computer Science</p>
-          <p class="text-lg text-gray-600">Year Level: 2nd Year</p>
-          <p class="text-lg text-gray-600">Email: juan.delacruz@student.tlc.edu.ph</p>
+        <div class="grid md:grid-cols-1">
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <div class="flex items-start mb-8">
+              <img src="src/img/ID.jpg" alt="Student Photo" class="w-32 h-32 rounded-lg mr-6 object-cover border-2 border-blue-500">
+              <div>
+                <h3 class="text-2xl font-bold text-gray-800">John Doe</h3>
+                <p class="text-lg text-gray-600">Student ID: 2023-12345</p>
+                <p class="text-lg text-gray-600">Course: BSIT</p>
+                <p class="text-lg text-gray-600">Year Level: 2nd Year</p>
+                <p class="text-lg text-gray-600">Email: John.Doe@thelewiscollege.edu.ph</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-auto flex justify-between space-x-7">
+          <a href="index.html" id="info-back-btn" class="px-6 py-3 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition-colors flex items-center">
+            <i class='bx bx-arrow-back mr-2'></i> Back
+          </a>
+          <a href="payment-options.html" id="info-continue-btn" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center">
+            <i class='bx bx-right-arrow-alt mr-2'></i> Continue to Payment
+          </a>
         </div>
       </div>
-      </div>
-    </div>
-
-    <div class="mt-auto flex justify-between space-x-7">
-      <a href="index.html" id="info-back-btn" class="px-6 py-3 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition-colors flex items-center">
-      <i class='bx bx-arrow-back mr-2'></i> Back
-      </a>
-      <a href="payment-options.html" id="info-continue-btn" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center">
-      <i class='bx bx-right-arrow-alt mr-2'></i> Continue to Payment
-      </a>
-    </div>
-    </div>
-      </button>
-    </div>
-  </div>
-</main>
+    </main>
+    
     <!-- Footer -->
     <footer class="mt-4 text-center text-gray-600 text-sm">
       <p>© 2025 The Lewis College. All rights reserved.</p>
       <p>Smart RFID-Authenticated Self-Service Payment Kiosk</p>
     </footer>
-  </div>
 
-  <script src="js/main.js"></script>
+    <script src="js/main.js"></script>
+  </div>
 </body>
 </html>
