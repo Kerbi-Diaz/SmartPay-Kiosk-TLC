@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Students - TLC Payment Kiosk</title>
+  <link href="../src/output.css" rel="stylesheet">    
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="icon" href="../src/img/tlc_logo.png" type="image/x-icon">
+
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="flex h-screen">
+      <!-- Sidebar -->
+      <aside class="w-64 bg-blue-800 text-white">
+        <div class="p-4 flex items-center border-b border-blue-700">
+          <img src="../src/img/tlc_logo.png?height=60&width=60" alt="TLC Logo" class="h-12 mr-3">
+          <div>
+            <h1 class="font-bold">TLC Admin</h1>
+            <p class="text-xs text-blue-200">Payment Kiosk System</p>
+          </div>
+        </div>
+        <nav class="p-4">
+          <ul class="space-y-2">
+            <li>
+              <a href="admin-dashboard.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+                <i class='bx bxs-dashboard mr-3'></i> Dashboard
+              </a>
+            </li>
+            <li>
+              <a href="transactions.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+                <i class='bx bx-history mr-3'></i> Transactions
+              </a>
+            </li>
+            <li>
+              <a href="students.html" class="flex items-center p-2 rounded-lg bg-blue-700 hover:bg-blue-600">
+                <i class='bx bx-user mr-3'></i> Students
+              </a>
+            </li>
+            <li>
+              <a href="inventory.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+                <i class='bx bx-package mr-3'></i> Items
+              </a>
+            </li>
+            <li>
+              <a href="reports.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+                <i class='bx bx-bar-chart-alt-2 mr-3'></i> Reports
+              </a>
+            </li>
+            <li>
+              <a href="settings.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+                <i class='bx bx-cog mr-3'></i> Settings
+              </a>
+            </li>
+            <li class="mt-8">
+              <a href="admin-login.html" class="flex items-center p-2 rounded-lg hover:bg-blue-700">
+                <i class='bx bx-log-out mr-3'></i> Logout
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+  
+      <!-- Main Content -->
+      <main class="flex-1 overflow-auto">
+        <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+          <h2 class="text-xl font-bold text-gray-800">Students</h2>
+          <div class="flex items-center">
+            <span class="mr-4 text-sm text-gray-600" id="current-date-time">Loading date and time...</span>
+            <div class="flex items-center">
+              <span class="text-sm font-medium">Admin User</span>
+            </div>
+          </div>
+        </header>
+  
+        <div class="p-6">
+          <!-- Filters and Search -->
+          <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+              <h3 class="font-bold text-gray-800 mb-3 md:mb-0">Student Filters</h3>
+              <div class="flex flex-wrap gap-2">
+                <button id="export-students-btn" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 flex items-center">
+                  <i class='bx bx-export mr-1'></i> Export
+                </button>
+                <button id="print-students-btn" class="bg-gray-200 text-gray-800 px-3 py-1 rounded text-sm hover:bg-gray-300 flex items-center">
+                  <i class='bx bx-printer mr-1'></i> Print
+                </button>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">Course</label>
+                <select id="course-filter" class="w-full border border-gray-300 rounded p-2 text-sm">
+                  <option value="">All Courses</option>
+                  <option value="BSIT">BSIT</option>
+                  <option value="BSBA">BSBA</option>
+                  <option value="BSED">BSED</option>
+                  <option value="BEED">BEED</option>
+                  <option value="BSN">BSN</option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">Year Level</label>
+                <select id="year-filter" class="w-full border border-gray-300 rounded p-2 text-sm">
+                  <option value="">All Years</option>
+                  <option value="1st Year">1st Year</option>
+                  <option value="2nd Year">2nd Year</option>
+                  <option value="3rd Year">3rd Year</option>
+                  <option value="4th Year">4th Year</option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">Payment Status</label>
+                <select id="payment-status-filter" class="w-full border border-gray-300 rounded p-2 text-sm">
+                  <option value="">All Status</option>
+                  <option value="paid">Fully Paid</option>
+                  <option value="partial">Partially Paid</option>
+                  <option value="unpaid">Unpaid</option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">Search</label>
+                <div class="relative">
+                  <input id="student-search" type="text" placeholder="Search by ID, RFID, name, email..." class="w-full border border-gray-300 rounded p-2 pl-8 text-sm">
+                  <i class='bx bx-search absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400'></i>
+                </div>
+              </div>
+            </div>
+            <div id="rfid-notification" class="fixed top-20 right-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center hidden">
+              <i class='bx bx-id-card mr-2'></i>
+              <span id="rfid-message">Student found!</span>
+            </div>
+            <div class="mt-4">
+              <label class="block text-sm text-gray-600 mb-1">Unpaid Item Filter</label>
+              <select id="unpaid-item-filter" class="w-full border border-gray-300 rounded p-2 text-sm">
+                <option value="">All Items</option>
+                <option value="pe-uniform">PE Uniform</option>
+                <option value="acquaintance">Acquaintance Party</option>
+                <option value="intramurals-shirt">Intramurals T-Shirt</option>
+                <option value="foundation-day">Foundation Day</option>
+                <option value="foundation-day">NSTP-shirt</option>
+              </select>
+            </div>
+          </div>
+  
+          <!-- Students Table -->
+          <div class="bg-white rounded-lg shadow-sm">
+            <div class="p-4 border-b flex justify-between items-center">
+              <h3 class="font-bold text-gray-800">Student List</h3>
+              <span id="student-count" class="text-sm text-gray-500">Loading students...</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead>
+                  <tr class="bg-gray-50">
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="id">
+                      Student ID <i class='bx bx-sort-alt-2'></i>
+                    </th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="name">
+                      Name <i class='bx bx-sort-alt-2'></i>
+                    </th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="course">
+                      Course <i class='bx bx-sort-alt-2'></i>
+                    </th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="year">
+                      Year Level <i class='bx bx-sort-alt-2'></i>
+                    </th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Email
+                    </th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Unpaid Items
+                    </th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="students-table-body" class="divide-y divide-gray-200">
+                  <!-- Student rows will be dynamically inserted here -->
+                </tbody>
+              </table>
+            </div>
+            <div class="p-4 border-t flex justify-between items-center">
+              <p class="text-sm text-gray-500">Showing <span id="showing-count">0</span> of <span id="total-count">0</span> students</p>
+              <div class="flex space-x-1">
+                <button id="prev-page" class="px-3 py-1 border rounded-lg text-sm">Previous</button>
+                <div id="page-numbers" class="flex space-x-1">
+                  <!-- Page numbers will be inserted here -->
+                </div>
+                <button id="next-page" class="px-3 py-1 border rounded-lg text-sm">Next</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+  
+    <!-- Student Details Modal -->
+    <div id="student-details-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto relative">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-gray-800">Student Details</h2>
+        <button id="close-student-details" class="text-gray-500 hover:text-gray-700">
+        <i class='bx bx-x text-2xl'></i>
+        </button>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div class="md:col-span-1">
+        <div class="bg-gray-50 p-4 rounded-lg text-center">
+          <h3 id="modal-student-name" class="text-xl font-bold text-gray-800">Maria Santos</h3>
+          <p id="modal-student-id" class="text-gray-600">ID: 2023-10234</p>
+          <p id="modal-student-course-year" class="text-gray-600">BSIT - 2nd Year</p>
+        </div>
+        </div>
+        
+        <div class="md:col-span-2">
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h4 class="font-bold text-gray-800 mb-3">Contact Information</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm text-gray-500">Email:</p>
+            <p id="modal-student-email" class="font-medium">maria.santos@student.tlc.edu.ph</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Phone:</p>
+            <p id="modal-student-phone" class="font-medium">+63 912 345 6789</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Address:</p>
+            <p id="modal-student-address" class="font-medium">123 Main St., Sorsogon City</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Emergency Contact:</p>
+            <p id="modal-student-emergency" class="font-medium">Juan Santos - +63 923 456 7890</p>
+          </div>
+          </div>
+        </div>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h4 class="font-bold text-gray-800 mb-3">Payment Status</h4>
+          <div id="payment-status-container" class="space-y-3">
+          <!-- Payment status items will be inserted here -->
+          </div>
+        </div>
+        </div>
+        
+        <div>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h4 class="font-bold text-gray-800 mb-3">Recent Transactions</h4>
+          <div id="recent-transactions-container" class="space-y-3">
+          <!-- Recent transactions will be inserted here -->
+          </div>
+          <div class="mt-3 text-right">
+          <a id="view-all-transactions" href="#" class="text-blue-600 hover:text-blue-800 text-sm">View All Transactions</a>
+          </div>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <script>
+      const modal = document.getElementById('student-details-modal');
+      const closeBtn = document.getElementById('close-student-details');
+    
+      // Close modal on close button click
+      closeBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
+      });
+    
+      // Close modal on outside click
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.add('hidden');
+        }
+      });
+    </script>
+    
+    
+    <!-- Success Notification -->
+    <div id="success-notification" class="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center hidden">
+      <i class='bx bx-check-circle mr-2'></i>
+      <span id="success-message">Operation completed successfully!</span>
+    </div>
+  <script>// Sample student data
+    let students = [
+      {
+        rfid: "3321733326",
+        id: "2023-1021",
+        name: "Arjelone Joven",
+        course: "BSIT",
+        year: "3rd Year",
+        email: "arjelone.joven@thelewiscollege.edu.ph",
+        phone: "+63 912 345 6789",
+        address: "123 Main St., Sorsogon City",
+        emergencyName: "Juan Santos",
+        emergencyPhone: "+63 923 456 7890",
+        unpaidItems: [],
+        transactions: [
+          { id: "TLC-20230015", date: "Apr 17, 2025", amount: "₱500.00", description: "Intrams Fee" }
+        ]
+      },
+      {
+        rfid: "3320625758",
+        id: "2022-0560",
+        name: "Kerbi Vincent Eugerio",
+        course: "BSBA",
+        year: "3rd Year",
+        email: "kerbivincent.eugerio@thelewiscollege.edu.ph",
+        phone: "+63 912 345 6784",
+        address: "101 Palm St., Sorsogon City",
+        emergencyName: "Luz Dela Cruz",
+        emergencyPhone: "+63 923 456 7895",
+        unpaidItems: ["nstp-shirt"],
+        transactions: [
+          { id: "TLC-20230016", date: "Apr 18, 2025", amount: "₱450.00", description: "NSTP shirt" }
+        ]
+      },
+      {
+        rfid: "3321710846",
+        id: "2023-1023",
+        name: "Jherill Balingbing",
+        course: "BSED",
+        year: "1st Year",
+        email: "jherill.balingbing@thelewiscollege.edu.ph",
+        phone: "+63 912 345 6785",
+        address: "202 Palm St., Sorsogon City",
+        emergencyName: "Pedro Reyes",
+        emergencyPhone: "+63 923 456 7896",
+        unpaidItems: ["foundation-day"],
+        transactions: [
+          { id: "TLC-20230017", date: "Apr 15, 2025", amount: "₱250.00", description: "ID Lanyards" }
+        ]
+      },
+      {
+        rfid: "RFID00123456",
+        id: "2023-1024",
+        name: "Carlos Lim",
+        course: "BSIT",
+        year: "3rd Year",
+        email: "carlos.lim@thelewiscollege.edu.ph",
+        phone: "+63 912 345 6786",
+        address: "303 Palm St., Sorsogon City",
+        emergencyName: "Luisa Lim",
+        emergencyPhone: "+63 923 456 7897",
+        unpaidItems: ["acquaintance", "intramurals-shirt"],
+        transactions: [
+          { id: "TLC-20230018", date: "Apr 20, 2025", amount: "₱500.00", description: "Intrams Fee" }
+        ]
+      },
+      {
+        rfid: "RFID00123456",
+        id: "2023-10238",
+        name: "Lorna Diaz",
+        course: "BSN",
+        year: "2nd Year",
+        email: "lorna.diaz@thelewiscollege.edu.ph",
+        phone: "+63 912 345 6787",
+        address: "404 Palm St., Sorsogon City",
+        emergencyName: "Cesar Diaz",
+        emergencyPhone: "+63 923 456 7898",
+        unpaidItems: ["nstp-shirt"],
+        transactions: [
+          { id: "TLC-20230019", date: "Apr 22, 2025", amount: "₱450.00", description: "NSTP shirt" }
+        ]
+      },
+      {
+        rfid: "RFID00123456",
+        id: "2023-1025",
+        name: "Roberto Gomez",
+        course: "BSBA",
+        year: "4th Year",
+        email: "roberto.gomez@thelewiscollege.edu.ph",
+        phone: "+63 912 345 6788",
+        address: "505 Palm St., Sorsogon City",
+        emergencyName: "Marta Gomez",
+        emergencyPhone: "+63 923 456 7899",
+        unpaidItems: ["acquaintance", "intramurals-shirt"],
+        transactions: [
+          { id: "TLC-20230020", date: "Apr 23, 2025", amount: "₱250.00", description: "ID Lanyards" }
+        ]
+      },
+      {
+        rfid: "RFID00123456",
+        id: "2023-1026",
+        name: "Angela Cruz",
+        course: "BSIT",
+        year: "3rd Year",
+        email: "angela.cruz@thelewiscollege.edu.ph",
+        phone: "+63 912 345 6790",
+        address: "606 Palm St., Sorsogon City",
+        emergencyName: "Leo Cruz",
+        emergencyPhone: "+63 923 456 7800",
+        unpaidItems: [],
+        transactions: [
+          { id: "TLC-20230021", date: "Apr 24, 2025", amount: "₱500.00", description: "Intrams Fee" }
+        ]
+      },
+      {
+        rfid: "RFID00123456",
+        id: "2023-1027",
+        name: "Mark David",
+        course: "BSCS",
+        year: "1st Year",
+        email: "mark.david@thelewiscollege.edu.ph",
+        phone: "+63 912 345 6791",
+        address: "707 Palm St., Sorsogon City",
+        emergencyName: "Sandra David",
+        emergencyPhone: "+63 923 456 7801",
+        unpaidItems: ["acquaintance", "intramurals-shirt"],
+        transactions: [
+          { id: "TLC-20230022", date: "Apr 25, 2025", amount: "₱450.00", description: "NSTP shirt" }
+        ]
+      },
+      {
+        rfid: "RFID00123456",
+        id: "2023-1028",
+        name: "Nina Morales",
+        course: "BSA",
+        year: "4th Year",
+        email: "nina.morales@thelewiscollege.edu.ph",
+        phone: "+63 912 345 6792",
+        address: "808 Palm St., Sorsogon City",
+        emergencyName: "Felix Morales",
+        emergencyPhone: "+63 923 456 7802",
+        unpaidItems: ["pe-uniform"],
+        transactions: [
+          { id: "TLC-20230023", date: "Apr 26, 2025", amount: "₱250.00", description: "ID Lanyards" }
+        ]
+      },
+      {
+        rfid: "RFID00123456",
+        id: "2023-1029",
+        name: "Jose Tan",
+        course: "BSECE",
+        year: "2nd Year",
+        email: "jose.tan@thelewiscollege.edu.ph",
+        phone: "+63 912 345 6793",
+        address: "909 Palm St., Sorsogon City",
+        emergencyName: "Teresa Tan",
+        emergencyPhone: "+63 923 456 7803",
+        unpaidItems: [],
+        transactions: [
+          { id: "TLC-20230024", date: "Apr 27, 2025", amount: "₱500.00", description: "Intrams Fee" }
+        ]
+      },
+      {
+        rfid: "RFID00123456",
+        id: "2023-1030",
+        name: "Clara Santos",
+        course: "BSN",
+        year: "1st Year",
+        email: "clara.santos@thelewiscollege.edu.ph",
+        phone: "+63 912 345 6794",
+        address: "110 Palm St., Sorsogon City",
+        emergencyName: "Julio Santos",
+        emergencyPhone: "+63 923 456 7804",
+        unpaidItems: [],
+        transactions: [
+          { id: "TLC-20230025", date: "Apr 28, 2025", amount: "₱450.00", description: "NSTP shirt" }
+        ]
+      },
+      {
+        rfid: "RFID00123456",
+        id: "2023-1031",
+        name: "Kevin Ramos",
+        course: "BSIT",
+        year: "1st Year",
+        email: "kevin.ramos@thelewiscollege.edu.ph",
+        phone: "+63 912 345 6795",
+        address: "111 Palm St., Sorsogon City",
+        emergencyName: "Elena Ramos",
+        emergencyPhone: "+63 923 456 7805",
+        unpaidItems: [],
+        transactions: [
+          { id: "TLC-20230026", date: "Apr 29, 2025", amount: "₱800.00", description: "PE Uniform SET" }
+        ]
+      },
+      {
+        rfid: "RFID00123456",
+        id: "2023-1032",
+        name: "Jasmine Lee",
+        course: "BSHRM",
+        year: "2nd Year",
+        email: "jasmine.lee@thelewiscollege.edu.ph",
+        phone: "+63 912 345 6796",
+        address: "112 Palm St., Sorsogon City",
+        emergencyName: "Ricky Lee",
+        emergencyPhone: "+63 923 456 7806",
+        unpaidItems: ["pe-uniform"],
+        transactions: [
+          { id: "TLC-20230027", date: "Apr 30, 2025", amount: "₱800.00", description: "PE Uniform SET" }
+        ]
+      },
+      {
+        rfid: "RFID00123456",
+        id: "2023-1033",
+        name: "Daryl Bautista",
+        course: "BSED",
+        year: "3rd Year",
+        email: "daryl.bautista@thelewiscollege.edu.ph",
+        phone: "+63 912 345 6797",
+        address: "113 Palm St., Sorsogon City",
+        emergencyName: "Nora Bautista",
+        emergencyPhone: "+63 923 456 7807",
+        unpaidItems: ["acquaintance", "intramurals-shirt"],
+        transactions: [
+          { id: "TLC-20230028", date: "May 1, 2025", amount: "₱800.00", description: "PE Uniform SET" }
+        ]
+      },
+      {
+        rfid: "RFID00123456",
+        id: "2023-1034",
+        name: "Franchesca Yulo",
+        course: "BSA",
+        year: "1st Year",
+        email: "franchesca.yulo@thelewiscollege.edu.ph",
+        phone: "+63 912 345 6798",
+        address: "114 Palm St., Sorsogon City",
+        emergencyName: "Mario Yulo",
+        emergencyPhone: "+63 923 456 7808",
+        unpaidItems: ["pe-uniform"],
+        transactions: [
+          { id: "TLC-20230029", date: "May 2, 2025", amount: "₱800.00", description: "PE Uniform SET" }
+        ]
+      },
+      {
+        rfid: "RFID00123456",
+        id: "2023-1035",
+        name: "Patrick Mendoza",
+        course: "BSIT",
+        year: "4th Year",
+        email: "patrick.mendoza@thelewiscollege.edu.ph",
+        phone: "+63 912 345 6799",
+        address: "115 Palm St., Sorsogon City",
+        emergencyName: "Trina Mendoza",
+        emergencyPhone: "+63 923 456 7809",
+        unpaidItems: ["acquaintance", "intramurals-shirt"],
+        transactions: [
+          { id: "TLC-20230030", date: "May 3, 2025", amount: "₱800.00", description: "PE Uniform SET" }
+        ]
+      }
+    ];
+    
+    const paymentItems = [
+      { id: "id-lanyard", name: "Foundation Day", description: "School anniversary celebration", price: "₱500.00" },
+      { id: "nstp-shirt", name: "NSTP-shirt", description: "Required for 1st yr", price: "₱550.00" },
+      { id: "pe-uniform", name: "PE Uniform", description: "Required for PE classes", price: "₱550.00" },
+      { id: "acquaintance", name: "Acquaintance Party", description: "Annual social gathering", price: "₱800.00" },
+      { id: "intramurals-shirt", name: "Intramurals T-Shirt", description: "Official intramurals shirt", price: "₱350.00" },
+      { id: "foundation-day", name: "Foundation Day", description: "School anniversary celebration", price: "₱500.00" }
+    ];
+    
+    // Pagination variables
+    let currentPage = 1;
+    const studentsPerPage = 10;
+    let filteredStudents = [...students];
+    let sortColumn = "id";
+    let sortDirection = "asc";
+    
+    // DOM elements
+    const studentsTableBody = document.getElementById('students-table-body');
+    const studentCount = document.getElementById('student-count');
+    const showingCount = document.getElementById('showing-count');
+    const totalCount = document.getElementById('total-count');
+    const prevPageBtn = document.getElementById('prev-page');
+    const nextPageBtn = document.getElementById('next-page');
+    const pageNumbersContainer = document.getElementById('page-numbers');
+    const studentSearch = document.getElementById('student-search');
+    const courseFilter = document.getElementById('course-filter');
+    const yearFilter = document.getElementById('year-filter');
+    const paymentStatusFilter = document.getElementById('payment-status-filter');
+    const unpaidItemFilter = document.getElementById('unpaid-item-filter');
+    const exportStudentsBtn = document.getElementById('export-students-btn');
+    const printStudentsBtn = document.getElementById('print-students-btn');
+    
+    // Modal elements
+    const studentDetailsModal = document.getElementById('student-details-modal');
+    const closeStudentDetails = document.getElementById('close-student-details');
+    const successNotification = document.getElementById('success-notification');
+    const rfidNotification = document.getElementById('rfid-notification');
+    const rfidMessage = document.getElementById('rfid-message');
+    
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
+      
+      renderStudents();
+      renderPagination();
+      
+      // Event listeners
+      studentSearch.addEventListener('input', handleFilterChange);
+      courseFilter.addEventListener('change', handleFilterChange);
+      yearFilter.addEventListener('change', handleFilterChange);
+      paymentStatusFilter.addEventListener('change', handleFilterChange);
+      unpaidItemFilter.addEventListener('change', handleFilterChange);
+      
+      // Sorting
+      document.querySelectorAll('[data-sort]').forEach(header => {
+        header.addEventListener('click', function() {
+          const column = this.getAttribute('data-sort');
+          if (sortColumn === column) {
+            sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+          } else {
+            sortColumn = column;
+            sortDirection = 'asc';
+          }
+          sortStudents();
+          renderStudents();
+        });
+      });
+      
+      // Pagination
+      prevPageBtn.addEventListener('click', goToPrevPage);
+      nextPageBtn.addEventListener('click', goToNextPage);
+      
+      // Modal controls
+      closeStudentDetails.addEventListener('click', () => studentDetailsModal.classList.add('hidden'));
+      
+      // Export and print
+      exportStudentsBtn.addEventListener('click', exportStudentsToCSV);
+      printStudentsBtn.addEventListener('click', printStudentList);
+    });
+    
+    // Handle filter changes
+    function handleFilterChange() {
+      currentPage = 1;
+      filterStudents();
+      renderStudents();
+      renderPagination();
+    }
+    
+    // Update date and time
+    function updateDateTime() {
+      const now = new Date();
+      const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      };
+      document.getElementById('current-date-time').textContent = now.toLocaleDateString('en-US', options);
+    }
+    
+    // Filter students
+    function filterStudents() {
+      const searchTerm = studentSearch.value.toLowerCase();
+      const course = courseFilter.value;
+      const year = yearFilter.value;
+      const paymentStatus = paymentStatusFilter.value;
+      const unpaidItem = unpaidItemFilter.value;
+      
+      filteredStudents = students.filter(student => {
+        const matchesSearch = 
+          student.id.toLowerCase().includes(searchTerm) ||
+          (student.rfid && student.rfid.toLowerCase() === searchTerm) ||
+          student.name.toLowerCase().includes(searchTerm) ||
+          student.email.toLowerCase().includes(searchTerm);
+        
+        const matchesCourse = course === '' || student.course === course;
+        const matchesYear = year === '' || student.year === year;
+        
+        let matchesPaymentStatus = true;
+        if (paymentStatus === 'paid') {
+          matchesPaymentStatus = student.unpaidItems.length === 0;
+        } else if (paymentStatus === 'partial') {
+          matchesPaymentStatus = student.unpaidItems.length > 0 && student.unpaidItems.length < paymentItems.length;
+        } else if (paymentStatus === 'unpaid') {
+          matchesPaymentStatus = student.unpaidItems.length === paymentItems.length;
+        }
+        
+        let matchesUnpaidItem = true;
+        if (unpaidItem !== '') {
+          matchesUnpaidItem = student.unpaidItems.includes(unpaidItem);
+        }
+        
+        const shouldShow = matchesSearch && matchesCourse && matchesYear && matchesPaymentStatus && matchesUnpaidItem;
+        
+        if (shouldShow && student.rfid && student.rfid.toLowerCase() === searchTerm) {
+          studentSearch.value = student.name;
+          showRFIDNotification(student.name);
+        }
+        
+        return shouldShow;
+      });
+      
+      sortStudents();
+    }
+    
+    // Sort students
+    function sortStudents() {
+      filteredStudents.sort((a, b) => {
+        let valueA, valueB;
+        
+        switch (sortColumn) {
+          case 'id':
+            valueA = a.id;
+            valueB = b.id;
+            break;
+          case 'name':
+            valueA = a.name;
+            valueB = b.name;
+            break;
+          case 'course':
+            valueA = a.course;
+            valueB = b.course;
+            break;
+          case 'year':
+            valueA = a.year;
+            valueB = b.year;
+            break;
+          default:
+            valueA = a.id;
+            valueB = b.id;
+        }
+        
+        if (valueA < valueB) return sortDirection === 'asc' ? -1 : 1;
+        if (valueA > valueB) return sortDirection === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+    
+    // Render students table
+    function renderStudents() {
+      const startIndex = (currentPage - 1) * studentsPerPage;
+      const endIndex = startIndex + studentsPerPage;
+      const paginatedStudents = filteredStudents.slice(startIndex, endIndex);
+      
+      studentsTableBody.innerHTML = '';
+      
+      if (paginatedStudents.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="7" class="py-4 text-center text-gray-500">No students found matching your criteria</td>`;
+        studentsTableBody.appendChild(row);
+        return;
+      }
+      
+      paginatedStudents.forEach(student => {
+        const row = document.createElement('tr');
+        
+        let unpaidItemsDisplay = '';
+        if (student.unpaidItems.length === 0) {
+          unpaidItemsDisplay = '<span class="text-green-600 text-sm font-medium">All Paid</span>';
+        } else {
+          student.unpaidItems.forEach(itemId => {
+            const item = paymentItems.find(i => i.id === itemId);
+            if (item) {
+              let bgColor = 'bg-red-100';
+              let textColor = 'text-red-800';
+              
+              if (itemId === 'acquaintance') {
+                bgColor = 'bg-yellow-100';
+                textColor = 'text-yellow-800';
+              } else if (itemId === 'intramurals-shirt') {
+                bgColor = 'bg-blue-100';
+                textColor = 'text-blue-800';
+              } else if (itemId === 'foundation-day') {
+                bgColor = 'bg-purple-100';
+                textColor = 'text-purple-800';
+              }
+              
+              unpaidItemsDisplay += `<span class="px-2 py-0.5 text-xs rounded-full ${bgColor} ${textColor} mr-1">${item.name}</span>`;
+            }
+          });
+        }
+        
+        row.innerHTML = `
+          <td class="py-3 px-4 text-sm">${student.id}</td>
+          <td class="py-3 px-4">
+            <div class="flex items-center">
+              <p class="text-sm font-medium">${student.name}</p>
+            </div>
+          </td>
+          <td class="py-3 px-4 text-sm">${student.course}</td>
+          <td class="py-3 px-4 text-sm">${student.year}</td>
+          <td class="py-3 px-4 text-sm">${student.email}</td>
+          <td class="py-3 px-4">
+            <div class="flex flex-wrap gap-1">${unpaidItemsDisplay}</div>
+          </td>
+          <td class="py-3 px-4">
+            <div class="flex space-x-1">
+              <button class="text-blue-600 hover:text-blue-800 p-1 view-details" data-id="${student.id}" title="View Details">
+                <i class='bx bx-show'></i>
+              </button>
+            </div>
+          </td>
+        `;
+        
+        studentsTableBody.appendChild(row);
+      });
+      
+      showingCount.textContent = paginatedStudents.length;
+      totalCount.textContent = filteredStudents.length;
+      studentCount.textContent = `Showing ${paginatedStudents.length} of ${filteredStudents.length} students`;
+      
+      document.querySelectorAll('.view-details').forEach(btn => {
+        btn.addEventListener('click', function() {
+          viewStudentDetails(this.getAttribute('data-id'));
+        });
+      });
+    }
+    
+    // Pagination functions
+    function renderPagination() {
+      const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
+      pageNumbersContainer.innerHTML = '';
+      
+      if (totalPages <= 1) return;
+      
+      prevPageBtn.disabled = currentPage === 1;
+      
+      for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = `px-3 py-1 border rounded-lg text-sm ${currentPage === i ? 'bg-blue-600 text-white' : ''}`;
+        pageBtn.textContent = i;
+        pageBtn.addEventListener('click', () => {
+          currentPage = i;
+          renderStudents();
+          renderPagination();
+        });
+        pageNumbersContainer.appendChild(pageBtn);
+      }
+      
+      nextPageBtn.disabled = currentPage === totalPages;
+    }
+    
+    function goToPrevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        renderStudents();
+        renderPagination();
+      }
+    }
+    
+    function goToNextPage() {
+      const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderStudents();
+        renderPagination();
+      }
+    }
+    
+    // View student details
+    function viewStudentDetails(studentId) {
+      const student = students.find(s => s.id === studentId);
+      if (!student) return;
+      
+      document.getElementById('modal-student-name').textContent = student.name;
+      document.getElementById('modal-student-id').textContent = `ID: ${student.id}`;
+      document.getElementById('modal-student-course-year').textContent = `${student.course} - ${student.year}`;
+      document.getElementById('modal-student-email').textContent = student.email;
+      document.getElementById('modal-student-phone').textContent = student.phone;
+      document.getElementById('modal-student-address').textContent = student.address;
+      document.getElementById('modal-student-emergency').textContent = `${student.emergencyName} - ${student.emergencyPhone}`;
+      
+      const paymentStatusContainer = document.getElementById('payment-status-container');
+      paymentStatusContainer.innerHTML = '';
+      
+      paymentItems.forEach(item => {
+        const isPaid = !student.unpaidItems.includes(item.id);
+        
+        const paymentItem = document.createElement('div');
+        paymentItem.className = 'flex justify-between items-center p-2 border-b';
+        paymentItem.innerHTML = `
+          <div>
+            <p class="font-medium">${item.name}</p>
+            <p class="text-xs text-gray-500">${item.description}</p>
+          </div>
+          <span class="px-2 py-1 text-xs rounded-full ${isPaid ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+            ${isPaid ? 'Paid' : 'Unpaid'}
+          </span>
+        `;
+        paymentStatusContainer.appendChild(paymentItem);
+      });
+      
+      const transactionsContainer = document.getElementById('recent-transactions-container');
+      transactionsContainer.innerHTML = '';
+      
+      student.transactions.slice(0, 3).forEach(transaction => {
+        const transactionItem = document.createElement('div');
+        transactionItem.className = 'flex justify-between items-center p-2 border-b';
+        transactionItem.innerHTML = `
+          <div>
+            <p class="font-medium">${transaction.id}</p>
+            <p class="text-xs text-gray-500">${transaction.date}</p>
+          </div>
+          <div class="text-right">
+            <p class="font-medium">${transaction.amount}</p>
+            <p class="text-xs text-gray-500">${transaction.description}</p>
+          </div>
+        `;
+        transactionsContainer.appendChild(transactionItem);
+      });
+      
+      document.getElementById('view-all-transactions').href = `transactions.html?student=${student.id}`;
+      
+      studentDetailsModal.classList.remove('hidden');
+    }
+    
+    // Notification functions
+    function showRFIDNotification(studentName) {
+      rfidMessage.textContent = `Student: ${studentName}`;
+      rfidNotification.classList.remove('hidden');
+      setTimeout(() => rfidNotification.classList.add('hidden'), 3000);
+    }
+    
+    function showSuccess(message) {
+      document.getElementById('success-message').textContent = message;
+      successNotification.classList.remove('hidden');
+      setTimeout(() => successNotification.classList.add('hidden'), 3000);
+    }
+    
+    // Export to CSV
+    function exportStudentsToCSV() {
+      const headers = ['Student ID', 'Name', 'Course', 'Year Level', 'Email', 'Unpaid Items'];
+      
+      const rows = filteredStudents.map(student => {
+        const unpaidItems = student.unpaidItems.length === 0 
+          ? 'All Paid' 
+          : student.unpaidItems.map(itemId => {
+              const item = paymentItems.find(i => i.id === itemId);
+              return item ? item.name : itemId;
+            }).join(', ');
+        
+        return [
+          `"${student.id}"`,
+          `"${student.name}"`,
+          `"${student.course}"`,
+          `"${student.year}"`,
+          `"${student.email}"`,
+          `"${unpaidItems}"`
+        ].join(',');
+      });
+      
+      const csvContent = [
+        headers.join(','),
+        ...rows
+      ].join('\n');
+      
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `students_export_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      showSuccess('Students exported to CSV successfully!');
+    }
+    
+    // Print student list
+    function printStudentList() {
+      const printWindow = window.open('', '_blank');
+      
+      const filters = [];
+      if (studentSearch.value) filters.push(`Search: ${studentSearch.value}`);
+      if (courseFilter.value) filters.push(`Course: ${courseFilter.value}`);
+      if (yearFilter.value) filters.push(`Year: ${yearFilter.value}`);
+      if (paymentStatusFilter.value) filters.push(`Payment Status: ${paymentStatusFilter.value.replace('paid', 'Fully Paid').replace('partial', 'Partially Paid').replace('unpaid', 'Unpaid')}`);
+      if (unpaidItemFilter.value) {
+        const item = paymentItems.find(i => i.id === unpaidItemFilter.value);
+        filters.push(`Unpaid Item: ${item ? item.name : unpaidItemFilter.value}`);
+      }
+      const filtersSummary = filters.length > 0 ? `<p><strong>Applied Filters:</strong> ${filters.join(', ')}</p>` : '';
+      
+      const printContent = `
+        <html>
+          <head>
+            <title>Student List - TLC Payment Kiosk</title>
+            <style>
+              body { font-family: Arial, sans-serif; margin: 20px; }
+              h1 { text-align: center; }
+              .filters { margin-bottom: 20px; }
+              table { width: 100%; border-collapse: collapse; }
+              th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+              th { background-color: #f2f2f2; }
+              .unpaid-items span { display: inline-block; margin-right: 4px; padding: 2px 8px; border-radius: 12px; font-size: 12px; }
+              .bg-red-100 { background-color: #fee2e2; color: #b91c1c; }
+              .bg-yellow-100 { background-color: #fef9c3; color: #a16207; }
+              .bg-blue-100 { background-color: #dbeafe; color: #1e40af; }
+              .bg-purple-100 { background-color: #ede9fe; color: #5b21b6; }
+              .text-green-600 { color: #15803d; }
+            </style>
+          </head>
+          <body>
+            <h1>Student List - TLC Payment Kiosk</h1>
+            <div class="filters">
+              <p><strong>Date:</strong> ${new Date().toLocaleDateString('en-US', {
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric'
+              })}</p>
+              ${filtersSummary}
+              <p><strong>Total Students:</strong> ${filteredStudents.length}</p>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Student ID</th>
+                  <th>Name</th>
+                  <th>Course</th>
+                  <th>Year Level</th>
+                  <th>Email</th>
+                  <th>Unpaid Items</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${filteredStudents.map(student => {
+                  let unpaidItemsDisplay = '';
+                  if (student.unpaidItems.length === 0) {
+                    unpaidItemsDisplay = '<span class="text-green-600">All Paid</span>';
+                  } else {
+                    unpaidItemsDisplay = student.unpaidItems.map(itemId => {
+                      const item = paymentItems.find(i => i.id === itemId);
+                      if (!item) return '';
+                      let bgColor = 'bg-red-100';
+                      if (itemId === 'acquaintance') bgColor = 'bg-yellow-100';
+                      else if (itemId === 'intramurals-shirt') bgColor = 'bg-blue-100';
+                      else if (itemId === 'foundation-day') bgColor = 'bg-purple-100';
+                      return `<span class="${bgColor}">${item.name}</span>`;
+                    }).join(' ');
+                  }
+                  return `
+                    <tr>
+                      <td>${student.id}</td>
+                      <td>${student.name}</td>
+                      <td>${student.course}</td>
+                      <td>${student.year}</td>
+                      <td>${student.email}</td>
+                      <td class="unpaid-items">${unpaidItemsDisplay}</td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+          </body>
+        </html>
+      `;
+      
+      printWindow.document.write(printContent);
+      printWindow.document.close();
+      printWindow.print();
+      
+    }
+    
+    </script>
+
+
+</body>
+</html>
